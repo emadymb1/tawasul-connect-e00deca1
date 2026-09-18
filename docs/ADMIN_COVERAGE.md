@@ -45,3 +45,29 @@ _آخر تحديث: الخطوة 12 — Last updated: Step 12_
 ## Read-only resources (GET only)
 
 `/report-archive-entries`, `/report-archives`, `/timetable-dates`, `/timetable-days`, `/timetable-periods`, `/timetable-slots`, `/timetables`, `/units`, `/badges`, `/clinic-students`, `/clinics`, `/enf-planned-session-teachers`, `/enf-planned-sessions`, `/enf-session-students`, `/enf-sessions`, `/free-learning-progress`, `/free-learning-units`, `/house-point-categories`, `/house-points-house`, `/ib-diploma-cas-reflections`, `/ib-diploma-cas-supervisor-feedbacks`, `/ibpyp-glossaries`, `/ibpyp-unit-working-classes`, `/mastery-transcript-journey-logs`, `/meet-the-teacher-logins`, `/pd-requests`, `/professional-development-request-logs`, `/stream-posts`, `/trip-days`, `/trip-people`, `/trip-planner-request-logs`, `/trips`, `/budgets`, `/expenses`, `/fees`, `/finance-expense-logs`, `/form-submissions`, `/forms`, `/invoice-fees`, `/invoices`, `/library-events`, `/message-receipts`, `/messages`, `/staff-absence-dates`, `/staff-absences`, `/staff-coverage`, `/staff-duties`, `/person-status-logs`, `/personal-documents`, `/roles`, `/staff-contracts`, `/calendars`, `/departments`, `/form-groups`, `/grade-scale-grades`, `/grade-scales`, `/houses`, `/school-terms`, `/school-years`, `/spaces`, `/special-days`, `/year-groups`, `/actions`, `/api-logs`, `/custom-fields`, `/logs`, `/modules`, `/outcomes`, `/permissions`, `/rubrics`, `/settings`, `/alert-levels`, `/attendance-class-logs`, `/attendance-codes`, `/attendance-form-group-logs`, `/behaviour-letters`, `/in-archives`, `/individual-needs`, `/individual-needs-descriptors`, `/medical`, `/medical-conditions`
+
+---
+
+## Update — API v2 documentation (docs/api_docs_v2.txt)
+
+The newer documentation changes the earlier "browser still required" answer:
+
+Now possible from the app (previously browser-only):
+- Full replace (PUT) and write access on many resources that were GET-only in the first docs
+- Bulk create / update / delete (up to 500 records per transaction) — `/{resource}/bulk`
+- CSV export of any resource — `/{resource}/export`
+- File attachments: list, download, upload, delete — `/files/{resource}/{id}/{field}`
+  (only after an administrator enables file transfer in the Rest API settings)
+- Webhook subscriptions — `/webhooks` + `/events`
+- Server statistics, health, request analytics, and the user's own permission list — `/stats`,
+  `/health`, `/analytics`, `/permissions`
+- Single-call profiles for student, staff, family, course, finance, timetable and class roster
+
+Still browser-only:
+- Installing or updating modules and themes, backups, and server configuration files
+- Password-reset emails and other mail sending that has no API resource
+- The printable report builder output (report data is readable, PDF generation is not exposed)
+- Creating and revoking API keys
+
+The resource list is no longer hard-coded: the app reads `GET /resources` at run time, so any
+resource added on the server shows up in the Manage browser without an app update.
