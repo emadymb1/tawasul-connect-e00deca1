@@ -12,6 +12,7 @@ import '../../widgets/common.dart';
 import 'manage_repository.dart';
 import 'module_pages.dart';
 import 'resource_catalog.dart';
+import 'system_pages.dart';
 
 // ---------------------------------------------------------------------------
 // Manage home: every server resource, grouped by category, searchable.
@@ -221,6 +222,12 @@ class _ResourceListPageState extends ConsumerState<ResourceListPage> {
                   ? Icons.close_rounded
                   : Icons.checklist_rounded),
             ),
+          IconButton(
+            tooltip: strings.exportCsv,
+            onPressed: () => exportResourceCsv(context, ref, r.path,
+                filters: _query.filters),
+            icon: const Icon(Icons.download_rounded),
+          ),
           if (r.filters.isNotEmpty)
             IconButton(
               tooltip: strings.filters,

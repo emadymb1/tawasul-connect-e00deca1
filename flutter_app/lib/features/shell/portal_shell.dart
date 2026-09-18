@@ -10,6 +10,7 @@ import '../../widgets/school_year_switcher.dart';
 import '../../l10n/strings.dart';
 import '../admin/admin_pages.dart';
 import '../admin/manage_pages.dart';
+import '../admin/system_pages.dart';
 import '../auth/auth_controller.dart';
 import '../auth/models.dart';
 import '../community/community_pages.dart';
@@ -241,6 +242,13 @@ class _PortalShellState extends ConsumerState<PortalShell> {
         ),
         actions: [
           if (user.portal == Portal.admin) const SchoolYearSwitcher(),
+          if (user.portal == Portal.admin)
+            IconButton(
+              tooltip: strings.system,
+              onPressed: () =>
+                  _push(context, strings.system, const AdminSystemPage()),
+              icon: const Icon(Icons.memory_rounded),
+            ),
           IconButton(
             tooltip: strings.notifications,
             onPressed: () => _push(

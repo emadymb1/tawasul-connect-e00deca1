@@ -4,6 +4,7 @@ import '../../core/api_client.dart';
 import '../../core/openapi_schema.dart';
 import '../../core/providers.dart';
 import '../../core/school_year.dart';
+import '../../core/server_capabilities.dart';
 import 'resource_catalog.dart';
 
 /// Query for one page of a resource in the Manage browser.
@@ -155,8 +156,12 @@ final manageCatalogueSearchProvider = StateProvider<String>((ref) => '');
 final manageCatalogueProvider =
     Provider<Map<String, List<ApiResource>>>((ref) {
   final term = ref.watch(manageCatalogueSearchProvider).trim().toLowerCase();
+  // Prefer the live registry from GET /resources; fall back to the bundled
+  // catalogue while it loads or when the endpoint is unavailable.
+  final catalogue =
+      ref.watch(mergedResourceCatalogProvider).asData?.value ?? apiResources;
   final grouped = <String, List<ApiResource>>{};
-  for (final r in apiResources) {
+  for (final r in catalogue) {
     if (term.isNotEmpty &&
         !r.path.contains(term) &&
         !r.title.toLowerCase().contains(term) &&

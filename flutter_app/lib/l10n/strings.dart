@@ -177,6 +177,23 @@ class S {
   String get operations => _('operations');
   String get today => _('today');
 
+  // Step 13 — API v2 capabilities (system, exports, bulk, webhooks)
+  String get system => _('system');
+  String get serverHealth => _('serverHealth');
+  String get serverStats => _('serverStats');
+  String get apiAnalytics => _('apiAnalytics');
+  String get resourceRegistry => _('resourceRegistry');
+  String get resourcesAvailable => _('resourcesAvailable');
+  String get writableResources => _('writableResources');
+  String get myPermissions => _('myPermissions');
+  String get credential => _('credential');
+  String get webhooks => _('webhooks');
+  String get addWebhook => _('addWebhook');
+  String get webhookUrl => _('webhookUrl');
+  String get webhookEvents => _('webhookEvents');
+  String get exportCsv => _('exportCsv');
+  String get exportedRows => _('exportedRows');
+
   // Step 9 — admin Manage browser (all server resources)
   String get manage => _('manage');
   String get manageSubtitle => _('manageSubtitle');
@@ -465,6 +482,21 @@ class S {
     'yes': 'Yes',
     'no': 'No',
     'manage': 'Manage',
+    'system': 'System',
+    'serverHealth': 'Server health',
+    'serverStats': 'School statistics',
+    'apiAnalytics': 'API activity (7 days)',
+    'resourceRegistry': 'Resource registry',
+    'resourcesAvailable': 'Resources available',
+    'writableResources': 'Resources you can change',
+    'myPermissions': 'My permissions',
+    'credential': 'Current credential',
+    'webhooks': 'Webhooks',
+    'addWebhook': 'Add webhook',
+    'webhookUrl': 'Destination URL',
+    'webhookEvents': 'Events',
+    'exportCsv': 'Export CSV',
+    'exportedRows': 'Rows copied to clipboard',
     'manageSubtitle':
         'Every record on the school server, by module. What you can open, add or change follows your role exactly.',
     'searchResources': 'Search modules and resources',
@@ -735,6 +767,21 @@ class S {
     'yes': 'نعم',
     'no': 'لا',
     'manage': 'الإدارة الشاملة',
+    'system': 'النظام',
+    'serverHealth': 'حالة الخادم',
+    'serverStats': 'إحصاءات المدرسة',
+    'apiAnalytics': 'نشاط الواجهة البرمجية (٧ أيام)',
+    'resourceRegistry': 'سجل الموارد',
+    'resourcesAvailable': 'الموارد المتاحة',
+    'writableResources': 'موارد يمكنك تعديلها',
+    'myPermissions': 'صلاحياتي',
+    'credential': 'بيانات الدخول الحالية',
+    'webhooks': 'روابط الإشعار (Webhooks)',
+    'addWebhook': 'إضافة رابط إشعار',
+    'webhookUrl': 'رابط الوجهة',
+    'webhookEvents': 'الأحداث',
+    'exportCsv': 'تصدير CSV',
+    'exportedRows': 'صفوف منسوخة إلى الحافظة',
     'manageSubtitle':
         'كل السجلات على خادم المدرسة مرتبة حسب الموديول. ما يمكنك فتحه أو إضافته أو تعديله يتبع صلاحيات دورك تماماً.',
     'searchResources': 'ابحث في الموديولات والموارد',

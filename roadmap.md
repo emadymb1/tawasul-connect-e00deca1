@@ -140,3 +140,38 @@ All data is live from the API. No mock data anywhere.
 ## Open items needing you
 - [ ] Rotate the API key that was pasted in chat (Manage API Keys) — treat the old one as exposed.
 - [ ] Confirm which roles in `/roles` map to Teacher vs Support Staff vs Admin at your school if the defaults differ.
+
+## Step 13 — API v2 capabilities from the new documentation (DONE — code complete, not yet compiled)
+Source: `docs/api_docs_v2.txt` (Gibbon REST API 3.3.00 developer reference, uploaded 2026-09-18).
+The old `docs/api_docs.txt` is kept unchanged for reference.
+
+What is new on the server compared with the first documentation:
+- PUT (full replace) on nearly every resource, and many previously GET-only resources are now writable
+- `POST /{resource}/bulk` — up to 500 creates / updates / deletes in one transaction
+- `GET /{resource}/export` — whole-resource CSV export
+- `GET /{resource}/distinct?field=` and `GET /{resource}/aggregate?by=` — filter values and grouped counts
+- `GET /{resource}/{id}/{relation}` — relation traversal
+- `/files/{resource}/{id}/{field}` — list, download, upload and delete attachments (when the admin enables file transfer)
+- Composite endpoints: `/students/{id}/profile`, `/staff/{id}/profile`, `/families/{id}/profile`,
+  `/courses/{id}/overview`, `/students/{id}/finance`, `/students/{id}/timetable`, `/classes/{id}/roster`
+- Webhooks (`/webhooks`, `/events`) and `POST /batch`
+- Meta endpoints: `/health`, `/stats`, `/dashboard`, `/permissions`, `/analytics`, `/resources`, `/scopes`
+- New error envelope `{"error":{"code","message"},"meta":{"requestID"}}`
+
+Done in the app:
+- [x] `core/api_client.dart`: v2 error envelope parsing; `bulk`, `bulkDelete`, `exportCsv`, `distinct`,
+      `aggregate`, `relation`, all seven composite helpers, `batch`, file list/upload/delete/url,
+      `health`, `stats`, `dashboard`, `permissions`, `analytics`, `me`, `resources`, `scopes`,
+      `webhookEvents`, `logout`
+- [x] `core/server_capabilities.dart`: live providers for all meta endpoints plus `LiveResource`,
+      and a merged catalogue (live `/resources` overlaid on the bundled catalogue)
+- [x] Manage browser now lists resources from the live registry, so new server resources appear
+      without an app update; each resource list has a CSV export action
+- [x] `features/admin/system_pages.dart`: admin System screen (health, school statistics, API activity,
+      resource registry totals, my permissions, current credential, webhook subscriptions with add/delete)
+      reachable from the admin app bar
+- [x] Arabic + English strings for all of the above
+- [ ] Compile locally: `cd flutter_app && flutter pub get && flutter analyze`
+- [ ] Next: use the composite endpoints to replace multi-call profile screens (student, staff, family,
+      class roster), bulk attendance / markbook saving via `/bulk`, and attachment upload where the
+      server has file fields
