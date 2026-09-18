@@ -58,6 +58,9 @@ class AdminRepository {
   Future<List<Map<String, dynamic>>> roles() =>
       api.getList('/roles', pageSize: 40);
 
+  Future<List<Map<String, dynamic>>> classes({String? search}) =>
+      api.getList('/classes', pageSize: 60, search: search);
+
   // ------------------------------------------------------ school structure
 
   Future<List<Map<String, dynamic>>> schoolYears() =>
@@ -151,6 +154,14 @@ final schoolTotalsProvider = FutureProvider<SchoolTotals>(
 final adminStudentSearchProvider = StateProvider<String>((ref) => '');
 final adminStaffSearchProvider = StateProvider<String>((ref) => '');
 final adminUserSearchProvider = StateProvider<String>((ref) => '');
+final adminClassSearchProvider = StateProvider<String>((ref) => '');
+
+final adminClassesProvider = FutureProvider<List<Map<String, dynamic>>>((ref) {
+  final search = ref.watch(adminClassSearchProvider);
+  return ref
+      .watch(adminRepositoryProvider)
+      .classes(search: search.isEmpty ? null : search);
+});
 
 final adminStudentsProvider = FutureProvider<List<Map<String, dynamic>>>((ref) {
   final search = ref.watch(adminStudentSearchProvider);
