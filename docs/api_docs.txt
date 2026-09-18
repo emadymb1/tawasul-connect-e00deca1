@@ -1,0 +1,1373 @@
+
+
+
+
+Rest API
+
+API Documentation
+البدء
+Every endpoint lives under https://se.fiksutilitoimisto.fi/modules/Rest%20API/api.php/v2. Send your key in an Authorization header:
+
+curl -H 'Authorization: Bearer gib_your_key_here' \
+  'https://se.fiksutilitoimisto.fi/modules/Rest%20API/api.php/v2/students?pageSize=25&sort=surname'
+Collections accept page, pageSize, sort, search and fields, plus the filters listed for each resource. Add gibbonSchoolYearID to any request to work in a year other than the current one.
+
+The full machine-readable specification is available at /openapi.json, ready to paste into Postman, Insomnia or Swagger UI.
+
+Authentication
+API keys (gib_...) are created under Manage API Keys and suit server-to-server integrations.
+User tokens (tok_...) come from POST /auth/login and act as that person, subject to their Gibbon roles.
+A token can be renewed with POST /auth/refresh and cancelled with POST /auth/logout.
+Resources (343)
+Academics
+Endpoint	Methods	مجالات	التصفيات
+/class-enrolments
+Students and teachers attached to a class.
+Requires the School Admin module	GET POST PATCH DELETE	class-enrolments.read
+class-enrolments.write	gibbonCourseClassPerson.gibbonCourseClassID, gibbonCourseClassPerson.gibbonPersonID, gibbonCourseClassPerson.role, gibbonCourseClass.gibbonCourseID
+/classes
+Class groups within a course, with enrolment counts.
+Requires the School Admin module	GET POST PATCH DELETE	classes.read
+classes.write	gibbonCourseClass.gibbonCourseID, gibbonCourse.gibbonDepartmentID, gibbonCourseClass.attendance, gibbonCourseClass.reportable
+/course-class-maps
+Generated from the gibbonCourseClassMap table.
+Requires the Timetable Admin module	GET POST PATCH PUT DELETE	course-class-maps.read
+course-class-maps.write	gibbonCourseClassMap.gibbonCourseClassMapID, gibbonCourseClassMap.gibbonCourseClassID, gibbonCourseClassMap.gibbonFormGroupID, gibbonCourseClassMap.gibbonYearGroupID
+/courses
+Courses offered in a school year, grouped by department.
+Requires the School Admin module	GET POST PATCH DELETE	courses.read
+courses.write	gibbonCourse.gibbonDepartmentID, gibbonCourse.nameShort
+/crowd-assess-discusses
+Generated from the gibbonCrowdAssessDiscuss table.
+Requires the Crowd Assessment module	GET POST PATCH PUT DELETE	crowd-assess-discusses.read
+crowd-assess-discusses.write	gibbonCrowdAssessDiscuss.gibbonCrowdAssessDiscussID, gibbonCrowdAssessDiscuss.gibbonPlannerEntryHomeworkID, gibbonCrowdAssessDiscuss.gibbonPersonID, gibbonCrowdAssessDiscuss.timestamp
+/external-assessment-fields
+Generated from the gibbonExternalAssessmentField table.
+Requires the Formal Assessment module	GET POST PATCH PUT DELETE	external-assessment-fields.read
+external-assessment-fields.write	gibbonExternalAssessmentField.gibbonExternalAssessmentFieldID, gibbonExternalAssessmentField.gibbonExternalAssessmentID, gibbonExternalAssessmentField.name, gibbonExternalAssessmentField.category, gibbonExternalAssessmentField.gibbonScaleID
+/external-assessment-student-entries
+Generated from the gibbonExternalAssessmentStudentEntry table.
+Requires the Formal Assessment module	GET POST PATCH PUT DELETE	external-assessment-student-entries.read
+external-assessment-student-entries.write	gibbonExternalAssessmentStudentEntry.gibbonExternalAssessmentStudentEntryID, gibbonExternalAssessmentStudentEntry.gibbonExternalAssessmentStudentID, gibbonExternalAssessmentStudentEntry.gibbonExternalAssessmentFieldID, gibbonExternalAssessmentStudentEntry.gibbonScaleGradeID
+/external-assessment-students
+Generated from the gibbonExternalAssessmentStudent table.
+Requires the Formal Assessment module	GET POST PATCH PUT DELETE	external-assessment-students.read
+external-assessment-students.write	gibbonExternalAssessmentStudent.gibbonExternalAssessmentStudentID, gibbonExternalAssessmentStudent.gibbonExternalAssessmentID, gibbonExternalAssessmentStudent.gibbonPersonID, gibbonExternalAssessmentStudent.date
+/external-assessments
+Generated from the gibbonExternalAssessment table.
+Requires the School Admin module	GET POST PATCH PUT DELETE	external-assessments.read
+external-assessments.write	gibbonExternalAssessment.gibbonExternalAssessmentID, gibbonExternalAssessment.name, gibbonExternalAssessment.nameShort, gibbonExternalAssessment.active, gibbonExternalAssessment.allowFileUpload
+/internal-assessment-columns
+Generated from the gibbonInternalAssessmentColumn table.
+Requires the Tracking module	GET POST PATCH PUT DELETE	internal-assessment-columns.read
+internal-assessment-columns.write	gibbonInternalAssessmentColumn.gibbonInternalAssessmentColumnID, gibbonInternalAssessmentColumn.gibbonCourseClassID, gibbonInternalAssessmentColumn.groupingID, gibbonInternalAssessmentColumn.name, gibbonInternalAssessmentColumn.type, gibbonInternalAssessmentColumn.attainment, gibbonInternalAssessmentColumn.effort, gibbonInternalAssessmentColumn.comment, gibbonInternalAssessmentColumn.uploadedResponse, gibbonInternalAssessmentColumn.complete, gibbonInternalAssessmentColumn.completeDate, gibbonInternalAssessmentColumn.viewableStudents, gibbonInternalAssessmentColumn.viewableParents
+/internal-assessment-entries
+Generated from the gibbonInternalAssessmentEntry table.
+Requires the Tracking module	GET POST PATCH PUT DELETE	internal-assessment-entries.read
+internal-assessment-entries.write	gibbonInternalAssessmentEntry.gibbonInternalAssessmentEntryID, gibbonInternalAssessmentEntry.gibbonInternalAssessmentColumnID
+/lessons
+Lesson planner entries, including homework details.
+Requires the Planner module	GET POST PATCH DELETE	lessons.read
+lessons.write	gibbonPlannerEntry.gibbonCourseClassID, gibbonPlannerEntry.gibbonUnitID, gibbonPlannerEntry.date, gibbonPlannerEntry.homework
+/markbook-columns
+Assessment columns in a class markbook.
+Requires the Markbook module	GET POST PATCH DELETE	markbook-columns.read
+markbook-columns.write	gibbonMarkbookColumn.gibbonCourseClassID, gibbonMarkbookColumn.complete, gibbonMarkbookColumn.type, gibbonMarkbookColumn.gibbonSchoolYearTermID
+/markbook-entries
+Individual student results against a markbook column.
+Requires the Markbook module	GET POST PATCH DELETE	markbook-entries.read
+markbook-entries.write	gibbonMarkbookEntry.gibbonMarkbookColumnID, gibbonMarkbookEntry.gibbonPersonIDStudent, gibbonMarkbookColumn.gibbonCourseClassID, gibbonMarkbookEntry.attainmentConcern
+/markbook-targets
+Generated from the gibbonMarkbookTarget table.
+Requires the Markbook module	GET POST PATCH PUT DELETE	markbook-targets.read
+markbook-targets.write	gibbonMarkbookTarget.gibbonMarkbookTargetID, gibbonMarkbookTarget.gibbonCourseClassID, gibbonMarkbookTarget.gibbonScaleGradeID
+/markbook-weights
+Generated from the gibbonMarkbookWeight table.
+Requires the Markbook module	GET POST PATCH PUT DELETE	markbook-weights.read
+markbook-weights.write	gibbonMarkbookWeight.gibbonMarkbookWeightID, gibbonMarkbookWeight.gibbonCourseClassID, gibbonMarkbookWeight.type, gibbonMarkbookWeight.reportable, gibbonMarkbookWeight.calculate
+/planner-entry-discusses
+Generated from the gibbonPlannerEntryDiscuss table.
+Requires the Planner module	GET POST PATCH PUT DELETE	planner-entry-discusses.read
+planner-entry-discusses.write	gibbonPlannerEntryDiscuss.gibbonPlannerEntryDiscussID, gibbonPlannerEntryDiscuss.gibbonPlannerEntryID, gibbonPlannerEntryDiscuss.gibbonPersonID, gibbonPlannerEntryDiscuss.timestamp
+/planner-entry-guests
+Generated from the gibbonPlannerEntryGuest table.
+Requires the Planner module	GET POST PATCH PUT DELETE	planner-entry-guests.read
+planner-entry-guests.write	gibbonPlannerEntryGuest.gibbonPlannerEntryGuestID, gibbonPlannerEntryGuest.gibbonPlannerEntryID, gibbonPlannerEntryGuest.gibbonPersonID, gibbonPlannerEntryGuest.role
+/planner-entry-homeworks
+Generated from the gibbonPlannerEntryHomework table.
+Requires the Planner module	GET POST PATCH PUT DELETE	planner-entry-homeworks.read
+planner-entry-homeworks.write	gibbonPlannerEntryHomework.gibbonPlannerEntryHomeworkID, gibbonPlannerEntryHomework.gibbonPlannerEntryID, gibbonPlannerEntryHomework.gibbonPersonID, gibbonPlannerEntryHomework.type, gibbonPlannerEntryHomework.version, gibbonPlannerEntryHomework.status, gibbonPlannerEntryHomework.timestamp
+/planner-entry-outcomes
+Generated from the gibbonPlannerEntryOutcome table.
+Requires the Planner module	GET POST PATCH PUT DELETE	planner-entry-outcomes.read
+planner-entry-outcomes.write	gibbonPlannerEntryOutcome.gibbonPlannerEntryOutcomeID, gibbonPlannerEntryOutcome.gibbonPlannerEntryID, gibbonPlannerEntryOutcome.gibbonOutcomeID, gibbonPlannerEntryOutcome.sequenceNumber
+/planner-entry-student-homeworks
+Generated from the gibbonPlannerEntryStudentHomework table.
+Requires the Planner module	GET POST PATCH PUT DELETE	planner-entry-student-homeworks.read
+planner-entry-student-homeworks.write	gibbonPlannerEntryStudentHomework.gibbonPlannerEntryStudentHomeworkID, gibbonPlannerEntryStudentHomework.gibbonPlannerEntryID, gibbonPlannerEntryStudentHomework.gibbonPersonID, gibbonPlannerEntryStudentHomework.homeworkDueDateTime, gibbonPlannerEntryStudentHomework.homeworkComplete
+/planner-entry-student-trackers
+Generated from the gibbonPlannerEntryStudentTracker table.
+Requires the Planner module	GET POST PATCH PUT DELETE	planner-entry-student-trackers.read
+planner-entry-student-trackers.write	gibbonPlannerEntryStudentTracker.gibbonPlannerEntryStudentTrackerID, gibbonPlannerEntryStudentTracker.gibbonPlannerEntryID, gibbonPlannerEntryStudentTracker.gibbonPersonID, gibbonPlannerEntryStudentTracker.homeworkComplete
+/planner-parent-weekly-email-summaries
+Generated from the gibbonPlannerParentWeeklyEmailSummary table.
+Requires the Planner module	GET POST PATCH PUT DELETE	planner-parent-weekly-email-summaries.read
+planner-parent-weekly-email-summaries.write	gibbonPlannerParentWeeklyEmailSummary.gibbonPlannerParentWeeklyEmailSummaryID, gibbonPlannerParentWeeklyEmailSummary.gibbonSchoolYearID, gibbonPlannerParentWeeklyEmailSummary.confirmed
+/report-archive-entries
+Generated from the gibbonReportArchiveEntry table.
+Requires the Reports module	GET	report-archive-entries.read	gibbonReportArchiveEntry.gibbonReportArchiveEntryID, gibbonReportArchiveEntry.gibbonReportArchiveID, gibbonReportArchiveEntry.gibbonReportID, gibbonReportArchiveEntry.gibbonSchoolYearID, gibbonReportArchiveEntry.gibbonYearGroupID, gibbonReportArchiveEntry.gibbonFormGroupID, gibbonReportArchiveEntry.gibbonPersonID, gibbonReportArchiveEntry.type, gibbonReportArchiveEntry.status, gibbonReportArchiveEntry.timestampCreated, gibbonReportArchiveEntry.timestampModified, gibbonReportArchiveEntry.timestampSent, gibbonReportArchiveEntry.timestampAccessed, gibbonReportArchiveEntry.timestampAccessExpiry
+/report-archives
+Generated from the gibbonReportArchive table.
+Requires the Reports module	GET	report-archives.read	gibbonReportArchive.gibbonReportArchiveID, gibbonReportArchive.name, gibbonReportArchive.readonly, gibbonReportArchive.viewableStaff, gibbonReportArchive.viewableStudents, gibbonReportArchive.viewableParents, gibbonReportArchive.viewableOther
+/report-prototype-sections
+Generated from the gibbonReportPrototypeSection table.
+Requires the Reports module	GET POST PATCH PUT DELETE	report-prototype-sections.read
+report-prototype-sections.write	gibbonReportPrototypeSection.gibbonReportPrototypeSectionID, gibbonReportPrototypeSection.name, gibbonReportPrototypeSection.type, gibbonReportPrototypeSection.category, gibbonReportPrototypeSection.active, gibbonReportPrototypeSection.timestamp
+/report-template-fonts
+Generated from the gibbonReportTemplateFont table.
+Requires the Reports module	GET POST PATCH PUT DELETE	report-template-fonts.read
+report-template-fonts.write	gibbonReportTemplateFont.gibbonReportTemplateFontID, gibbonReportTemplateFont.fontType
+/report-template-sections
+Generated from the gibbonReportTemplateSection table.
+Requires the Reports module	GET POST PATCH PUT DELETE	report-template-sections.read
+report-template-sections.write	gibbonReportTemplateSection.gibbonReportTemplateSectionID, gibbonReportTemplateSection.gibbonReportTemplateID, gibbonReportTemplateSection.gibbonReportPrototypeSectionID, gibbonReportTemplateSection.name, gibbonReportTemplateSection.type, gibbonReportTemplateSection.sequenceNumber
+/report-templates
+Generated from the gibbonReportTemplate table.
+Requires the Reports module	GET POST PATCH PUT DELETE	report-templates.read
+report-templates.write	gibbonReportTemplate.gibbonReportTemplateID, gibbonReportTemplate.context, gibbonReportTemplate.name, gibbonReportTemplate.active, gibbonReportTemplate.timestamp
+/reporting-accesses
+Generated from the gibbonReportingAccess table.
+Requires the Reports module	GET POST PATCH PUT DELETE	reporting-accesses.read
+reporting-accesses.write	gibbonReportingAccess.gibbonReportingAccessID, gibbonReportingAccess.gibbonReportingCycleID, gibbonReportingAccess.accessType, gibbonReportingAccess.dateStart, gibbonReportingAccess.dateEnd, gibbonReportingAccess.canWrite, gibbonReportingAccess.canProofRead
+/reporting-criteria-types
+Generated from the gibbonReportingCriteriaType table.
+Requires the Reports module	GET POST PATCH PUT DELETE	reporting-criteria-types.read
+reporting-criteria-types.write	gibbonReportingCriteriaType.gibbonReportingCriteriaTypeID, gibbonReportingCriteriaType.name, gibbonReportingCriteriaType.active, gibbonReportingCriteriaType.gibbonScaleID
+/reporting-criterias
+Generated from the gibbonReportingCriteria table.
+Requires the Reports module	GET POST PATCH PUT DELETE	reporting-criterias.read
+reporting-criterias.write	gibbonReportingCriteria.gibbonReportingCriteriaID, gibbonReportingCriteria.gibbonReportingCycleID, gibbonReportingCriteria.gibbonReportingScopeID, gibbonReportingCriteria.gibbonReportingCriteriaTypeID, gibbonReportingCriteria.gibbonYearGroupID, gibbonReportingCriteria.gibbonFormGroupID, gibbonReportingCriteria.gibbonCourseID, gibbonReportingCriteria.target, gibbonReportingCriteria.name, gibbonReportingCriteria.category, gibbonReportingCriteria.gibbonScaleID, gibbonReportingCriteria.sequenceNumber
+/reporting-cycles
+Generated from the gibbonReportingCycle table.
+Requires the Reports module	GET POST PATCH PUT DELETE	reporting-cycles.read
+reporting-cycles.write	gibbonReportingCycle.gibbonReportingCycleID, gibbonReportingCycle.gibbonSchoolYearID, gibbonReportingCycle.name, gibbonReportingCycle.nameShort, gibbonReportingCycle.sequenceNumber, gibbonReportingCycle.dateStart, gibbonReportingCycle.dateEnd
+/reporting-progresses
+Generated from the gibbonReportingProgress table.
+Requires the Reports module	GET POST PATCH PUT DELETE	reporting-progresses.read
+reporting-progresses.write	gibbonReportingProgress.gibbonReportingProgressID, gibbonReportingProgress.gibbonReportingScopeID, gibbonReportingProgress.gibbonYearGroupID, gibbonReportingProgress.gibbonFormGroupID, gibbonReportingProgress.gibbonCourseClassID, gibbonReportingProgress.status
+/reporting-proofs
+Generated from the gibbonReportingProof table.
+Requires the Reports module	GET POST PATCH PUT DELETE	reporting-proofs.read
+reporting-proofs.write	gibbonReportingProof.gibbonReportingProofID, gibbonReportingProof.gibbonReportingValueID, gibbonReportingProof.status, gibbonReportingProof.timestampProofed, gibbonReportingProof.timestampActioned
+/reporting-scopes
+Generated from the gibbonReportingScope table.
+Requires the Reports module	GET POST PATCH PUT DELETE	reporting-scopes.read
+reporting-scopes.write	gibbonReportingScope.gibbonReportingScopeID, gibbonReportingScope.gibbonReportingCycleID, gibbonReportingScope.scopeType, gibbonReportingScope.name, gibbonReportingScope.sequenceNumber
+/reporting-values
+Generated from the gibbonReportingValue table.
+Requires the Reports module	GET POST PATCH PUT DELETE	reporting-values.read
+reporting-values.write	gibbonReportingValue.gibbonReportingValueID, gibbonReportingValue.gibbonReportingCycleID, gibbonReportingValue.gibbonReportingCriteriaID, gibbonReportingValue.gibbonSchoolYearID, gibbonReportingValue.gibbonCourseClassID, gibbonReportingValue.gibbonScaleGradeID, gibbonReportingValue.timestampCreated, gibbonReportingValue.timestampModified
+/reports
+Generated from the gibbonReport table.
+Requires the Reports module	GET POST PATCH PUT DELETE	reports.read
+reports.write	gibbonReport.gibbonReportID, gibbonReport.gibbonReportArchiveID, gibbonReport.gibbonReportTemplateID, gibbonReport.gibbonSchoolYearID, gibbonReport.name, gibbonReport.active, gibbonReport.status, gibbonReport.gibbonReportingCycleID, gibbonReport.queryBuilderQueryID, gibbonReport.accessDate, gibbonReport.timestampModified, gibbonReport.timestampGenerated
+/rubric-cells
+Generated from the gibbonRubricCell table.
+Requires the Rubrics module	GET POST PATCH PUT DELETE	rubric-cells.read
+rubric-cells.write	gibbonRubricCell.gibbonRubricCellID, gibbonRubricCell.gibbonRubricID, gibbonRubricCell.gibbonRubricColumnID, gibbonRubricCell.gibbonRubricRowID
+/rubric-columns
+Generated from the gibbonRubricColumn table.
+Requires the Rubrics module	GET POST PATCH PUT DELETE	rubric-columns.read
+rubric-columns.write	gibbonRubricColumn.gibbonRubricColumnID, gibbonRubricColumn.gibbonRubricID, gibbonRubricColumn.sequenceNumber, gibbonRubricColumn.gibbonScaleGradeID, gibbonRubricColumn.visualise
+/rubric-entries
+Generated from the gibbonRubricEntry table.
+Requires the Rubrics module	GET POST PATCH PUT DELETE	rubric-entries.read
+rubric-entries.write	gibbonRubricEntry.gibbonRubricEntry, gibbonRubricEntry.gibbonRubricID, gibbonRubricEntry.gibbonPersonID, gibbonRubricEntry.gibbonRubricCellID, gibbonRubricEntry.contextDBTableID
+/rubric-rows
+Generated from the gibbonRubricRow table.
+Requires the Rubrics module	GET POST PATCH PUT DELETE	rubric-rows.read
+rubric-rows.write	gibbonRubricRow.gibbonRubricRowID, gibbonRubricRow.gibbonRubricID, gibbonRubricRow.sequenceNumber, gibbonRubricRow.gibbonOutcomeID
+/timetable-dates
+Maps calendar dates onto timetable cycle days.
+Requires the Timetable module	GET	timetable-dates.read	gibbonTTDayDate.date, gibbonTTDayDate.gibbonTTDayID, gibbonTTDay.gibbonTTID
+/timetable-days
+Days within a timetable cycle.
+Requires the Timetable Admin module	GET	timetable-days.read	gibbonTTDay.gibbonTTID
+/timetable-periods
+Period rows and their start and end times.
+Requires the Timetable Admin module	GET	timetable-periods.read	gibbonTTColumnRow.gibbonTTColumnID, gibbonTTColumnRow.type
+/timetable-slots
+Scheduled class slots: which class meets in which period, day and room.
+Requires the Timetable module	GET	timetable-slots.read	gibbonTTDayRowClass.gibbonTTDayID, gibbonTTDayRowClass.gibbonCourseClassID, gibbonTTDayRowClass.gibbonSpaceID, gibbonTTDay.gibbonTTID
+/timetables
+Timetables defined for a school year.
+Requires the Timetable Admin module	GET	timetables.read	gibbonTT.active
+/tt-columns
+Generated from the gibbonTTColumn table.
+Requires the Timetable Admin module	GET POST PATCH PUT DELETE	tt-columns.read
+tt-columns.write	gibbonTTColumn.gibbonTTColumnID, gibbonTTColumn.name, gibbonTTColumn.nameShort
+/tt-day-row-class-exceptions
+Generated from the gibbonTTDayRowClassException table.
+Requires the Timetable Admin module	GET POST PATCH PUT DELETE	tt-day-row-class-exceptions.read
+tt-day-row-class-exceptions.write	gibbonTTDayRowClassException.gibbonTTDayRowClassExceptionID, gibbonTTDayRowClassException.gibbonTTDayRowClassID, gibbonTTDayRowClassException.gibbonPersonID
+/tt-imports
+Generated from the gibbonTTImport table.
+Requires the Timetable Admin module	GET POST PATCH PUT DELETE	tt-imports.read
+tt-imports.write	gibbonTTImport.gibbonTTImportID
+/tt-space-bookings
+Generated from the gibbonTTSpaceBooking table.
+Requires the Timetable module	GET POST PATCH PUT DELETE	tt-space-bookings.read
+tt-space-bookings.write	gibbonTTSpaceBooking.gibbonTTSpaceBookingID, gibbonTTSpaceBooking.foreignKey, gibbonTTSpaceBooking.foreignKeyID, gibbonTTSpaceBooking.gibbonPersonID, gibbonTTSpaceBooking.date, gibbonTTSpaceBooking.timeStart, gibbonTTSpaceBooking.timeEnd
+/tt-space-changes
+Generated from the gibbonTTSpaceChange table.
+Requires the Timetable module	GET POST PATCH PUT DELETE	tt-space-changes.read
+tt-space-changes.write	gibbonTTSpaceChange.gibbonTTSpaceChangeID, gibbonTTSpaceChange.gibbonTTDayRowClassID, gibbonTTSpaceChange.gibbonSpaceID, gibbonTTSpaceChange.date, gibbonTTSpaceChange.gibbonPersonID
+/unit-blocks
+Generated from the gibbonUnitBlock table.
+Requires the Planner module	GET POST PATCH PUT DELETE	unit-blocks.read
+unit-blocks.write	gibbonUnitBlock.gibbonUnitBlockID, gibbonUnitBlock.gibbonUnitID, gibbonUnitBlock.type, gibbonUnitBlock.sequenceNumber
+/unit-class-blocks
+Generated from the gibbonUnitClassBlock table.
+Requires the Planner module	GET POST PATCH PUT DELETE	unit-class-blocks.read
+unit-class-blocks.write	gibbonUnitClassBlock.gibbonUnitClassBlockID, gibbonUnitClassBlock.gibbonUnitClassID, gibbonUnitClassBlock.gibbonPlannerEntryID, gibbonUnitClassBlock.gibbonUnitBlockID, gibbonUnitClassBlock.type, gibbonUnitClassBlock.sequenceNumber, gibbonUnitClassBlock.complete
+/unit-classes
+Generated from the gibbonUnitClass table.
+Requires the Planner module	GET POST PATCH PUT DELETE	unit-classes.read
+unit-classes.write	gibbonUnitClass.gibbonUnitClassID, gibbonUnitClass.gibbonUnitID, gibbonUnitClass.gibbonCourseClassID, gibbonUnitClass.running
+/unit-outcomes
+Generated from the gibbonUnitOutcome table.
+Requires the Planner module	GET POST PATCH PUT DELETE	unit-outcomes.read
+unit-outcomes.write	gibbonUnitOutcome.gibbonUnitOutcomeID, gibbonUnitOutcome.gibbonUnitID, gibbonUnitOutcome.gibbonOutcomeID, gibbonUnitOutcome.sequenceNumber
+/units
+Units of work attached to a course.
+Requires the Planner module	GET	units.read	gibbonUnit.gibbonCourseID, gibbonUnit.active
+Modules: ATL
+Endpoint	Methods	مجالات	التصفيات
+/atl-columns
+Generated from the atlColumn table.
+Requires the ATL module	GET POST PATCH PUT DELETE	atl-columns.read
+atl-columns.write	atlColumn.atlColumnID, atlColumn.gibbonCourseClassID, atlColumn.groupingID, atlColumn.name, atlColumn.gibbonRubricID, atlColumn.complete, atlColumn.completeDate
+/atl-entries
+Generated from the atlEntry table.
+Requires the ATL module	GET POST PATCH PUT DELETE	atl-entries.read
+atl-entries.write	atlEntry.atlEntryID, atlEntry.atlColumnID, atlEntry.complete
+Modules: Alumni
+Endpoint	Methods	مجالات	التصفيات
+/alumni-alumnuses
+Generated from the alumniAlumnus table.
+Requires the Alumni module	GET POST PATCH PUT DELETE	alumni-alumnuses.read
+alumni-alumnuses.write	alumniAlumnus.alumniAlumnusID, alumniAlumnus.gender, alumniAlumnus.dob, alumniAlumnus.formerRole, alumniAlumnus.gibbonPersonID, alumniAlumnus.timestamp
+Modules: Badges
+Endpoint	Methods	مجالات	التصفيات
+/badge-awards
+Badges awarded to students.
+Requires the Badges module	GET POST DELETE	badge-awards.read
+badge-awards.write	badgesBadgeStudent.badgesBadgeID, badgesBadgeStudent.gibbonPersonID, badgesBadgeStudent.date
+/badges
+Badge definitions from the Badges module.
+Requires the Badges module	GET	badges.read	badgesBadge.active, badgesBadge.category
+/badges-awards-award-students
+Generated from the awardsAwardStudent table.
+Requires the Badges module	GET POST PATCH PUT DELETE	badges-awards-award-students.read
+badges-awards-award-students.write	awardsAwardStudent.awardsAwardStudentID, awardsAwardStudent.awardsAwardID, awardsAwardStudent.gibbonSchoolYearID, awardsAwardStudent.date, awardsAwardStudent.gibbonPersonID, awardsAwardStudent.timestamp
+Modules: CFA
+Endpoint	Methods	مجالات	التصفيات
+/cfa-columns
+Generated from the cfaColumn table.
+Requires the CFA module	GET POST PATCH PUT DELETE	cfa-columns.read
+cfa-columns.write	cfaColumn.cfaColumnID, cfaColumn.gibbonCourseClassID, cfaColumn.groupingID, cfaColumn.name, cfaColumn.attainment, cfaColumn.effort, cfaColumn.comment, cfaColumn.uploadedResponse, cfaColumn.gibbonPlannerEntryID, cfaColumn.complete, cfaColumn.completeDate
+/cfa-entries
+Generated from the cfaEntry table.
+Requires the CFA module	GET POST PATCH PUT DELETE	cfa-entries.read
+cfa-entries.write	cfaEntry.cfaEntryID, cfaEntry.cfaColumnID, cfaEntry.attainmentConcern, cfaEntry.effortConcern
+Modules: Clinics
+Endpoint	Methods	مجالات	التصفيات
+/clinic-students
+Student enrolment in clinics.
+Requires the Clinics module	GET	clinic-students.read	clinicsClinicStudent.clinicsClinicID, clinicsClinicStudent.clinicsBlockID, clinicsClinicStudent.gibbonPersonID, clinicsClinicStudent.status
+/clinics
+Clinic sessions offered in a block.
+Requires the Clinics module	GET	clinics.read	clinicsClinic.active, clinicsClinic.clinicsBlockID, clinicsClinic.gibbonDepartmentID
+/clinics-blocks
+Generated from the clinicsBlock table.
+Requires the Clinics module	GET POST PATCH PUT DELETE	clinics-blocks.read
+clinics-blocks.write	clinicsBlock.clinicsBlockID, clinicsBlock.gibbonSchoolYearID, clinicsBlock.sequenceNumber, clinicsBlock.name, clinicsBlock.firstDay, clinicsBlock.lastDay
+/clinics-priorities
+Generated from the clinicsPriority table.
+Requires the Clinics module	GET POST PATCH PUT DELETE	clinics-priorities.read
+clinics-priorities.write	clinicsPriority.clinicsPriorityID, clinicsPriority.gibbonSchoolYearID, clinicsPriority.gibbonDepartmentID, clinicsPriority.gibbonPersonID, clinicsPriority.priority
+Modules: Credentials
+Endpoint	Methods	مجالات	التصفيات
+/credentials-credentials
+Generated from the credentialsCredential table.
+Requires the Credentials module	GET POST PATCH PUT DELETE	credentials-credentials.read
+credentials-credentials.write	credentialsCredential.credentialsCredentialID, credentialsCredential.credentialsWebsiteID, credentialsCredential.gibbonPersonID, credentialsCredential.timestampCreator
+/credentials-websites
+Generated from the credentialsWebsite table.
+Requires the Credentials module	GET POST PATCH PUT DELETE	credentials-websites.read
+credentials-websites.write	credentialsWebsite.credentialsWebsiteID, credentialsWebsite.active, credentialsWebsite.timestampCreator
+Modules: Deep Learning
+Endpoint	Methods	مجالات	التصفيات
+/deep-learning-choices
+Generated from the deepLearningChoice table.
+Requires the Deep Learning module	GET POST PATCH PUT DELETE	deep-learning-choices.read
+deep-learning-choices.write	deepLearningChoice.deepLearningChoiceID, deepLearningChoice.deepLearningExperienceID, deepLearningChoice.deepLearningEventID, deepLearningChoice.gibbonPersonID, deepLearningChoice.timestampCreated, deepLearningChoice.timestampModified
+/deep-learning-enrolments
+Generated from the deepLearningEnrolment table.
+Requires the Deep Learning module	GET POST PATCH PUT DELETE	deep-learning-enrolments.read
+deep-learning-enrolments.write	deepLearningEnrolment.deepLearningEnrolmentID, deepLearningEnrolment.deepLearningExperienceID, deepLearningEnrolment.deepLearningEventID, deepLearningEnrolment.deepLearningChoiceID, deepLearningEnrolment.gibbonPersonID, deepLearningEnrolment.status, deepLearningEnrolment.timestampCreated, deepLearningEnrolment.timestampModified
+/deep-learning-event-dates
+Generated from the deepLearningEventDate table.
+Requires the Deep Learning module	GET POST PATCH PUT DELETE	deep-learning-event-dates.read
+deep-learning-event-dates.write	deepLearningEventDate.deepLearningEventDateID, deepLearningEventDate.deepLearningEventID, deepLearningEventDate.eventDate, deepLearningEventDate.name, deepLearningEventDate.timeStart, deepLearningEventDate.timeEnd
+/deep-learning-events
+Generated from the deepLearningEvent table.
+Requires the Deep Learning module	GET POST PATCH PUT DELETE	deep-learning-events.read
+deep-learning-events.write	deepLearningEvent.deepLearningEventID, deepLearningEvent.gibbonSchoolYearID, deepLearningEvent.name, deepLearningEvent.nameShort, deepLearningEvent.active, deepLearningEvent.viewableDate, deepLearningEvent.accessOpenDate, deepLearningEvent.accessCloseDate, deepLearningEvent.accessEnrolmentDate
+/deep-learning-experience-trips
+Generated from the deepLearningExperienceTrip table.
+Requires the Deep Learning module	GET POST PATCH PUT DELETE	deep-learning-experience-trips.read
+deep-learning-experience-trips.write	deepLearningExperienceTrip.deepLearningExperienceTripID, deepLearningExperienceTrip.deepLearningExperienceID, deepLearningExperienceTrip.tripPlannerRequestID
+/deep-learning-experience-venues
+Generated from the deepLearningExperienceVenue table.
+Requires the Deep Learning module	GET POST PATCH PUT DELETE	deep-learning-experience-venues.read
+deep-learning-experience-venues.write	deepLearningExperienceVenue.deepLearningExperienceVenueID, deepLearningExperienceVenue.deepLearningExperienceID, deepLearningExperienceVenue.deepLearningEventDateID, deepLearningExperienceVenue.gibbonSpaceID, deepLearningExperienceVenue.allDay, deepLearningExperienceVenue.timeStart, deepLearningExperienceVenue.timeEnd
+/deep-learning-experiences
+Generated from the deepLearningExperience table.
+Requires the Deep Learning module	GET POST PATCH PUT DELETE	deep-learning-experiences.read
+deep-learning-experiences.write	deepLearningExperience.deepLearningExperienceID, deepLearningExperience.deepLearningEventID, deepLearningExperience.deepLearningUnitID, deepLearningExperience.name, deepLearningExperience.active, deepLearningExperience.gibbonGroupID, deepLearningExperience.timestampModified
+/deep-learning-staffs
+Generated from the deepLearningStaff table.
+Requires the Deep Learning module	GET POST PATCH PUT DELETE	deep-learning-staffs.read
+deep-learning-staffs.write	deepLearningStaff.deepLearningStaffID, deepLearningStaff.deepLearningExperienceID, deepLearningStaff.gibbonPersonID, deepLearningStaff.canEdit
+/deep-learning-unit-authors
+Generated from the deepLearningUnitAuthor table.
+Requires the Deep Learning module	GET POST PATCH PUT DELETE	deep-learning-unit-authors.read
+deep-learning-unit-authors.write	deepLearningUnitAuthor.deepLearningUnitAuthorID, deepLearningUnitAuthor.deepLearningUnitID, deepLearningUnitAuthor.gibbonPersonID, deepLearningUnitAuthor.timestamp
+/deep-learning-unit-blocks
+Generated from the deepLearningUnitBlock table.
+Requires the Deep Learning module	GET POST PATCH PUT DELETE	deep-learning-unit-blocks.read
+deep-learning-unit-blocks.write	deepLearningUnitBlock.deepLearningUnitBlockID, deepLearningUnitBlock.deepLearningUnitID, deepLearningUnitBlock.type, deepLearningUnitBlock.sequenceNumber
+/deep-learning-unit-photos
+Generated from the deepLearningUnitPhoto table.
+Requires the Deep Learning module	GET POST PATCH PUT DELETE	deep-learning-unit-photos.read
+deep-learning-unit-photos.write	deepLearningUnitPhoto.deepLearningUnitPhotoID, deepLearningUnitPhoto.deepLearningUnitID, deepLearningUnitPhoto.sequenceNumber
+/deep-learning-unit-tags
+Generated from the deepLearningUnitTag table.
+Requires the Deep Learning module	GET POST PATCH PUT DELETE	deep-learning-unit-tags.read
+deep-learning-unit-tags.write	deepLearningUnitTag.deepLearningUnitTagID
+/deep-learning-units
+Generated from the deepLearningUnit table.
+Requires the Deep Learning module	GET POST PATCH PUT DELETE	deep-learning-units.read
+deep-learning-units.write	deepLearningUnit.deepLearningUnitID, deepLearningUnit.name, deepLearningUnit.status, deepLearningUnit.timestampCreated, deepLearningUnit.timestampModified
+Modules: Enrichment and Flow
+Endpoint	Methods	مجالات	التصفيات
+/enf-announcements
+Generated from the enfAnnouncement table.
+Requires the Enrichment and Flow module	GET POST PATCH PUT DELETE	enf-announcements.read
+enf-announcements.write	enfAnnouncement.enfAnnouncementID, enfAnnouncement.date
+/enf-block-dates
+Generated from the enfBlockDate table.
+Requires the Enrichment and Flow module	GET POST PATCH PUT DELETE	enf-block-dates.read
+enf-block-dates.write	enfBlockDate.enfBlockDateID, enfBlockDate.enfBlockID, enfBlockDate.date
+/enf-block-facilities
+Generated from the enfBlockFacility table.
+Requires the Enrichment and Flow module	GET POST PATCH PUT DELETE	enf-block-facilities.read
+enf-block-facilities.write	enfBlockFacility.enfBlockFacilityID, enfBlockFacility.enfBlockID, enfBlockFacility.gibbonSpaceID
+/enf-blocks
+Generated from the enfBlock table.
+Requires the Enrichment and Flow module	GET POST PATCH PUT DELETE	enf-blocks.read
+enf-blocks.write	enfBlock.enfBlockID, enfBlock.gibbonSchoolYearID, enfBlock.gibbonCourseID, enfBlock.name, enfBlock.gibbonDaysOfWeekID, enfBlock.timeStart, enfBlock.timeEnd, enfBlock.signUpSameDay, enfBlock.signUpStart
+/enf-credit-mentors
+Generated from the enfCreditMentor table.
+Requires the Enrichment and Flow module	GET POST PATCH PUT DELETE	enf-credit-mentors.read
+enf-credit-mentors.write	enfCreditMentor.enfCreditMentorID, enfCreditMentor.enfCreditID, enfCreditMentor.gibbonPersonID
+/enf-credits
+Generated from the enfCredit table.
+Requires the Enrichment and Flow module	GET POST PATCH PUT DELETE	enf-credits.read
+enf-credits.write	enfCredit.enfCreditID, enfCredit.enfDomainID, enfCredit.name, enfCredit.active
+/enf-domains
+Generated from the enfDomain table.
+Requires the Enrichment and Flow module	GET POST PATCH PUT DELETE	enf-domains.read
+enf-domains.write	enfDomain.enfDomainID, enfDomain.name, enfDomain.active, enfDomain.sequenceNumber
+/enf-journeys
+Generated from the enfJourney table.
+Requires the Enrichment and Flow module	GET POST PATCH PUT DELETE	enf-journeys.read
+enf-journeys.write	enfJourney.enfJourneyID, enfJourney.gibbonSchoolYearID, enfJourney.type, enfJourney.enfOpportunityID, enfJourney.enfCreditID, enfJourney.status, enfJourney.timestampJoined, enfJourney.timestampCompletePending, enfJourney.timestampCompleteApproved, enfJourney.evidenceType
+/enf-opportunities
+Generated from the enfOpportunity table.
+Requires the Enrichment and Flow module	GET POST PATCH PUT DELETE	enf-opportunities.read
+enf-opportunities.write	enfOpportunity.enfOpportunityID, enfOpportunity.name, enfOpportunity.active
+/enf-opportunity-credits
+Generated from the enfOpportunityCredit table.
+Requires the Enrichment and Flow module	GET POST PATCH PUT DELETE	enf-opportunity-credits.read
+enf-opportunity-credits.write	enfOpportunityCredit.enfOpportunityCreditID, enfOpportunityCredit.enfOpportunityID, enfOpportunityCredit.enfCreditID
+/enf-opportunity-mentors
+Generated from the enfOpportunityMentor table.
+Requires the Enrichment and Flow module	GET POST PATCH PUT DELETE	enf-opportunity-mentors.read
+enf-opportunity-mentors.write	enfOpportunityMentor.enfOpportunityMentorID, enfOpportunityMentor.enfOpportunityID, enfOpportunityMentor.gibbonPersonID
+/enf-planned-session-teachers
+Generated from the enfPlannedSessionTeacher table.
+Requires the Enrichment and Flow module	GET	enf-planned-session-teachers.read	enfPlannedSessionTeacher.enfPlannedSessionTeacherID, enfPlannedSessionTeacher.enfPlannedSessionID, enfPlannedSessionTeacher.gibbonPersonID, enfPlannedSessionTeacher.timestampCreated
+/enf-planned-sessions
+Generated from the enfPlannedSession table.
+Requires the Enrichment and Flow module	GET	enf-planned-sessions.read	enfPlannedSession.enfPlannedSessionID, enfPlannedSession.enfBlockID, enfPlannedSession.enfSessionID, enfPlannedSession.enfBlockFacilityID, enfPlannedSession.gibbonSpaceID, enfPlannedSession.timestampCreated
+/enf-planner-entries
+Generated from the enfPlannerEntry table.
+Requires the Enrichment and Flow module	GET POST PATCH PUT DELETE	enf-planner-entries.read
+enf-planner-entries.write	enfPlannerEntry.enfPlannerEntryID, enfPlannerEntry.gibbonPersonID, enfPlannerEntry.date
+/enf-planner-tasks
+Generated from the enfPlannerTask table.
+Requires the Enrichment and Flow module	GET POST PATCH PUT DELETE	enf-planner-tasks.read
+enf-planner-tasks.write	enfPlannerTask.enfPlannerTaskID, enfPlannerTask.enfPlannerEntryID, enfPlannerTask.category, enfPlannerTask.sequenceNumber, enfPlannerTask.timestamp
+/enf-session-students
+Generated from the enfSessionStudent table.
+Requires the Enrichment and Flow module	GET	enf-session-students.read	enfSessionStudent.enfSessionStudentID, enfSessionStudent.enfPlannedSessionID, enfSessionStudent.enfSessionID, enfSessionStudent.enfBlockID, enfSessionStudent.gibbonPersonID, enfSessionStudent.gibbonSpaceID, enfSessionStudent.date, enfSessionStudent.timeStart, enfSessionStudent.timeEnd, enfSessionStudent.type, enfSessionStudent.timestampCreated
+/enf-sessions
+Generated from the enfSession table.
+Requires the Enrichment and Flow module	GET	enf-sessions.read	enfSession.enfSessionID, enfSession.type, enfSession.timestampCreated, enfSession.timestampModified
+Modules: Flexible Learning
+Endpoint	Methods	مجالات	التصفيات
+/flexible-learning-categories
+Generated from the flexibleLearningCategory table.
+Requires the Flexible Learning module	GET POST PATCH PUT DELETE	flexible-learning-categories.read
+flexible-learning-categories.write	flexibleLearningCategory.flexibleLearningCategoryID, flexibleLearningCategory.name, flexibleLearningCategory.sequenceNumber, flexibleLearningCategory.active
+/flexible-learning-majors
+Generated from the flexibleLearningMajor table.
+Requires the Flexible Learning module	GET POST PATCH PUT DELETE	flexible-learning-majors.read
+flexible-learning-majors.write	flexibleLearningMajor.flexibleLearningMajorID, flexibleLearningMajor.name
+/flexible-learning-unit-blocks
+Generated from the flexibleLearningUnitBlock table.
+Requires the Flexible Learning module	GET POST PATCH PUT DELETE	flexible-learning-unit-blocks.read
+flexible-learning-unit-blocks.write	flexibleLearningUnitBlock.flexibleLearningUnitBlockID, flexibleLearningUnitBlock.flexibleLearningUnitID, flexibleLearningUnitBlock.type, flexibleLearningUnitBlock.sequenceNumber
+/flexible-learning-unit-submissions
+Generated from the flexibleLearningUnitSubmission table.
+Requires the Flexible Learning module	GET POST PATCH PUT DELETE	flexible-learning-unit-submissions.read
+flexible-learning-unit-submissions.write	flexibleLearningUnitSubmission.flexibleLearningUnitSubmissionID, flexibleLearningUnitSubmission.flexibleLearningUnitID, flexibleLearningUnitSubmission.gibbonPersonID, flexibleLearningUnitSubmission.gibbonSchoolYearID, flexibleLearningUnitSubmission.status, flexibleLearningUnitSubmission.evidenceType, flexibleLearningUnitSubmission.timestampSubmitted, flexibleLearningUnitSubmission.timestampFeedback
+/flexible-learning-units
+Generated from the flexibleLearningUnit table.
+Requires the Flexible Learning module	GET POST PATCH PUT DELETE	flexible-learning-units.read
+flexible-learning-units.write	flexibleLearningUnit.flexibleLearningUnitID, flexibleLearningUnit.name, flexibleLearningUnit.active, flexibleLearningUnit.offline, flexibleLearningUnit.flexibleLearningCategoryID, flexibleLearningUnit.availableStudent, flexibleLearningUnit.availableStaff, flexibleLearningUnit.availableParent, flexibleLearningUnit.availableOther, flexibleLearningUnit.timestamp
+Modules: Free Learning
+Endpoint	Methods	مجالات	التصفيات
+/free-learning-badges
+Generated from the freeLearningBadge table.
+Requires the Free Learning module	GET POST PATCH PUT DELETE	free-learning-badges.read
+free-learning-badges.write	freeLearningBadge.freeLearningBadgeID, freeLearningBadge.badgesBadgeID, freeLearningBadge.active
+/free-learning-mentor-group-persons
+Generated from the freeLearningMentorGroupPerson table.
+Requires the Free Learning module	GET POST PATCH PUT DELETE	free-learning-mentor-group-persons.read
+free-learning-mentor-group-persons.write	freeLearningMentorGroupPerson.freeLearningMentorGroupPersonID, freeLearningMentorGroupPerson.freeLearningMentorGroupID, freeLearningMentorGroupPerson.gibbonPersonID, freeLearningMentorGroupPerson.role
+/free-learning-mentor-groups
+Generated from the freeLearningMentorGroup table.
+Requires the Free Learning module	GET POST PATCH PUT DELETE	free-learning-mentor-groups.read
+free-learning-mentor-groups.write	freeLearningMentorGroup.freeLearningMentorGroupID, freeLearningMentorGroup.name, freeLearningMentorGroup.assignment, freeLearningMentorGroup.gibbonPersonFieldID
+/free-learning-progress
+Student progress through free learning units.
+Requires the Free Learning module	GET	free-learning-progress.read	freeLearningUnitStudent.gibbonPersonIDStudent, freeLearningUnitStudent.freeLearningUnitID, freeLearningUnitStudent.status
+/free-learning-unit-authors
+Generated from the freeLearningUnitAuthor table.
+Requires the Free Learning module	GET POST PATCH PUT DELETE	free-learning-unit-authors.read
+free-learning-unit-authors.write	freeLearningUnitAuthor.freeLearningUnitAuthorID, freeLearningUnitAuthor.freeLearningUnitID, freeLearningUnitAuthor.gibbonPersonID
+/free-learning-unit-blocks
+Generated from the freeLearningUnitBlock table.
+Requires the Free Learning module	GET POST PATCH PUT DELETE	free-learning-unit-blocks.read
+free-learning-unit-blocks.write	freeLearningUnitBlock.freeLearningUnitBlockID, freeLearningUnitBlock.freeLearningUnitID, freeLearningUnitBlock.type, freeLearningUnitBlock.sequenceNumber
+/free-learning-unit-outcomes
+Generated from the freeLearningUnitOutcome table.
+Requires the Free Learning module	GET POST PATCH PUT DELETE	free-learning-unit-outcomes.read
+free-learning-unit-outcomes.write	freeLearningUnitOutcome.freeLearningUnitOutcomeID, freeLearningUnitOutcome.freeLearningUnitID, freeLearningUnitOutcome.gibbonOutcomeID, freeLearningUnitOutcome.sequenceNumber
+/free-learning-unit-prerequisites
+Generated from the freeLearningUnitPrerequisite table.
+Requires the Free Learning module	GET POST PATCH PUT DELETE	free-learning-unit-prerequisites.read
+free-learning-unit-prerequisites.write	freeLearningUnitPrerequisite.freeLearningUnitPrerequisiteID, freeLearningUnitPrerequisite.freeLearningUnitID
+/free-learning-units
+Self-directed learning units.
+Requires the Free Learning module	GET	free-learning-units.read	freeLearningUnit.active
+Modules: Help Desk
+Endpoint	Methods	مجالات	التصفيات
+/helpdesk-department-permissionses
+Generated from the helpDeskDepartmentPermissions table.
+Requires the Help Desk module	GET POST PATCH PUT DELETE	helpdesk-department-permissionses.read
+helpdesk-department-permissionses.write	helpDeskDepartmentPermissions.departmentPermissionsID, helpDeskDepartmentPermissions.departmentID, helpDeskDepartmentPermissions.gibbonRoleID
+/helpdesk-departmentses
+Generated from the helpDeskDepartments table.
+Requires the Help Desk module	GET POST PATCH PUT DELETE	helpdesk-departmentses.read
+helpdesk-departmentses.write	helpDeskDepartments.departmentID
+/helpdesk-group-departments
+Generated from the helpDeskGroupDepartment table.
+Requires the Help Desk module	GET POST PATCH PUT DELETE	helpdesk-group-departments.read
+helpdesk-group-departments.write	helpDeskGroupDepartment.groupDepartmentID, helpDeskGroupDepartment.groupID, helpDeskGroupDepartment.departmentID
+/helpdesk-issue-discusses
+Generated from the helpDeskIssueDiscuss table.
+Requires the Help Desk module	GET POST PATCH PUT DELETE	helpdesk-issue-discusses.read
+helpdesk-issue-discusses.write	helpDeskIssueDiscuss.issueDiscussID, helpDeskIssueDiscuss.issueID, helpDeskIssueDiscuss.timestamp, helpDeskIssueDiscuss.gibbonPersonID
+/helpdesk-issue-noteses
+Generated from the helpDeskIssueNotes table.
+Requires the Help Desk module	GET POST PATCH PUT DELETE	helpdesk-issue-noteses.read
+helpdesk-issue-noteses.write	helpDeskIssueNotes.issueNoteID, helpDeskIssueNotes.issueID, helpDeskIssueNotes.timestamp, helpDeskIssueNotes.gibbonPersonID
+/helpdesk-issues
+Generated from the helpDeskIssue table.
+Requires the Help Desk module	GET POST PATCH PUT DELETE	helpdesk-issues.read
+helpdesk-issues.write	helpDeskIssue.issueID, helpDeskIssue.technicianID, helpDeskIssue.gibbonPersonID, helpDeskIssue.date, helpDeskIssue.status, helpDeskIssue.category, helpDeskIssue.gibbonSchoolYearID, helpDeskIssue.createdByID, helpDeskIssue.subcategoryID, helpDeskIssue.gibbonSpaceID
+/helpdesk-reply-templates
+Generated from the helpDeskReplyTemplate table.
+Requires the Help Desk module	GET POST PATCH PUT DELETE	helpdesk-reply-templates.read
+helpdesk-reply-templates.write	helpDeskReplyTemplate.helpDeskReplyTemplateID, helpDeskReplyTemplate.name
+/helpdesk-subcategorieses
+Generated from the helpDeskSubcategories table.
+Requires the Help Desk module	GET POST PATCH PUT DELETE	helpdesk-subcategorieses.read
+helpdesk-subcategorieses.write	helpDeskSubcategories.subcategoryID, helpDeskSubcategories.departmentID
+/helpdesk-tech-groupses
+Generated from the helpDeskTechGroups table.
+Requires the Help Desk module	GET POST PATCH PUT DELETE	helpdesk-tech-groupses.read
+helpdesk-tech-groupses.write	helpDeskTechGroups.groupID, helpDeskTechGroups.viewIssueStatus
+/helpdesk-technicianses
+Generated from the helpDeskTechnicians table.
+Requires the Help Desk module	GET POST PATCH PUT DELETE	helpdesk-technicianses.read
+helpdesk-technicianses.write	helpDeskTechnicians.technicianID, helpDeskTechnicians.gibbonPersonID, helpDeskTechnicians.groupID
+Modules: Higher Education
+Endpoint	Methods	مجالات	التصفيات
+/higher-education-application-institutions
+Generated from the higherEducationApplicationInstitution table.
+Requires the Higher Education module	GET POST PATCH PUT DELETE	higher-education-application-institutions.read
+higher-education-application-institutions.write	higherEducationApplicationInstitution.higherEducationApplicationInstitutionID, higherEducationApplicationInstitution.higherEducationApplicationID, higherEducationApplicationInstitution.higherEducationInstitutionID, higherEducationApplicationInstitution.higherEducationMajorID, higherEducationApplicationInstitution.status, higherEducationApplicationInstitution.offer
+/higher-education-applications
+Generated from the higherEducationApplication table.
+Requires the Higher Education module	GET POST PATCH PUT DELETE	higher-education-applications.read
+higher-education-applications.write	higherEducationApplication.higherEducationApplicationID, higherEducationApplication.gibbonPersonID, higherEducationApplication.applying
+/higher-education-institutions
+Generated from the higherEducationInstitution table.
+Requires the Higher Education module	GET POST PATCH PUT DELETE	higher-education-institutions.read
+higher-education-institutions.write	higherEducationInstitution.higherEducationInstitutionID, higherEducationInstitution.name, higherEducationInstitution.active
+/higher-education-majors
+Generated from the higherEducationMajor table.
+Requires the Higher Education module	GET POST PATCH PUT DELETE	higher-education-majors.read
+higher-education-majors.write	higherEducationMajor.higherEducationMajorID, higherEducationMajor.name, higherEducationMajor.active
+/higher-education-reference-components
+Generated from the higherEducationReferenceComponent table.
+Requires the Higher Education module	GET POST PATCH PUT DELETE	higher-education-reference-components.read
+higher-education-reference-components.write	higherEducationReferenceComponent.higherEducationReferenceComponentID, higherEducationReferenceComponent.higherEducationReferenceID, higherEducationReferenceComponent.gibbonPersonID, higherEducationReferenceComponent.status, higherEducationReferenceComponent.type
+/higher-education-references
+Generated from the higherEducationReference table.
+Requires the Higher Education module	GET POST PATCH PUT DELETE	higher-education-references.read
+higher-education-references.write	higherEducationReference.higherEducationReferenceID, higherEducationReference.gibbonPersonID, higherEducationReference.gibbonSchoolYearID, higherEducationReference.type, higherEducationReference.status, higherEducationReference.alertsSent, higherEducationReference.timestamp
+/higher-education-staffs
+Generated from the higherEducationStaff table.
+Requires the Higher Education module	GET POST PATCH PUT DELETE	higher-education-staffs.read
+higher-education-staffs.write	higherEducationStaff.higherEducationStaffID, higherEducationStaff.gibbonPersonID, higherEducationStaff.role
+/higher-education-students
+Generated from the higherEducationStudent table.
+Requires the Higher Education module	GET POST PATCH PUT DELETE	higher-education-students.read
+higher-education-students.write	higherEducationStudent.higherEducationStudentID, higherEducationStudent.gibbonPersonID
+Modules: House Points
+Endpoint	Methods	مجالات	التصفيات
+/house-point-categories
+Categories under which house and student points are awarded.
+Requires the House Points module	GET	house-point-categories.read	hpCategory.categoryType
+/house-points-house
+House points awarded to a house as a whole.
+Requires the House Points module	GET	house-points-house.read	hpPointHouse.houseID, hpPointHouse.categoryID
+/house-points-student
+House points awarded to individual students.
+Requires the House Points module	GET POST DELETE	house-points-student.read
+house-points-student.write	hpPointStudent.studentID, hpPointStudent.categoryID
+Modules: IB Diploma
+Endpoint	Methods	مجالات	التصفيات
+/ib-diploma-cas-commitments
+Generated from the ibDiplomaCASCommitment table.
+Requires the IB Diploma module	GET POST PATCH PUT DELETE	ib-diploma-cas-commitments.read
+ib-diploma-cas-commitments.write	ibDiplomaCASCommitment.ibDiplomaCASCommitmentID, ibDiplomaCASCommitment.gibbonPersonID, ibDiplomaCASCommitment.name, ibDiplomaCASCommitment.approval, ibDiplomaCASCommitment.status, ibDiplomaCASCommitment.dateStart, ibDiplomaCASCommitment.dateEnd
+/ib-diploma-cas-interviews
+Generated from the ibDiplomaCASInterview table.
+Requires the IB Diploma module	GET POST PATCH PUT DELETE	ib-diploma-cas-interviews.read
+ib-diploma-cas-interviews.write	ibDiplomaCASInterview.ibDiplomaCASInterviewID, ibDiplomaCASInterview.1_date, ibDiplomaCASInterview.2_date, ibDiplomaCASInterview.3_date
+/ib-diploma-cas-reflections
+Generated from the ibDiplomaCASReflection table.
+Requires the IB Diploma module	GET	ib-diploma-cas-reflections.read	ibDiplomaCASReflection.ibDiplomaCASReflectionID, ibDiplomaCASReflection.ibDiplomaCASCommitmentID, ibDiplomaCASReflection.gibbonPersonID, ibDiplomaCASReflection.timestamp
+/ib-diploma-cas-staffs
+Generated from the ibDiplomaCASStaff table.
+Requires the IB Diploma module	GET POST PATCH PUT DELETE	ib-diploma-cas-staffs.read
+ib-diploma-cas-staffs.write	ibDiplomaCASStaff.ibDiplomaCASStaffID, ibDiplomaCASStaff.gibbonPersonID, ibDiplomaCASStaff.role
+/ib-diploma-cas-supervisor-feedbacks
+Generated from the ibDiplomaCASSupervisorFeedback table.
+Requires the IB Diploma module	GET	ib-diploma-cas-supervisor-feedbacks.read	ibDiplomaCASSupervisorFeedback.ibDiplomaCASSupervisorFeedbackID, ibDiplomaCASSupervisorFeedback.ibDiplomaCASCommitmentID
+/ib-diploma-students
+Generated from the ibDiplomaStudent table.
+Requires the IB Diploma module	GET POST PATCH PUT DELETE	ib-diploma-students.read
+ib-diploma-students.write	ibDiplomaStudent.ibDiplomaStudentID, ibDiplomaStudent.gibbonPersonID, ibDiplomaStudent.casStatusSchool
+Modules: IB PYP
+Endpoint	Methods	مجالات	التصفيات
+/ibpyp-glossaries
+Generated from the ibPYPGlossary table.
+Requires the IB PYP module	GET	ibpyp-glossaries.read	ibPYPGlossary.ibPYPGlossaryID, ibPYPGlossary.type, ibPYPGlossary.category
+/ibpyp-staff-teachings
+Generated from the ibPYPStaffTeaching table.
+Requires the IB PYP module	GET POST PATCH PUT DELETE	ibpyp-staff-teachings.read
+ibpyp-staff-teachings.write	ibPYPStaffTeaching.ibPYPStaffTeachingID, ibPYPStaffTeaching.gibbonPersonID, ibPYPStaffTeaching.role
+/ibpyp-students
+Generated from the ibPYPStudent table.
+Requires the IB PYP module	GET POST PATCH PUT DELETE	ibpyp-students.read
+ibpyp-students.write	ibPYPStudent.ibPYPStudentID, ibPYPStudent.gibbonPersonID
+/ibpyp-unit-master-blocks
+Generated from the ibPYPUnitMasterBlock table.
+Requires the IB PYP module	GET POST PATCH PUT DELETE	ibpyp-unit-master-blocks.read
+ibpyp-unit-master-blocks.write	ibPYPUnitMasterBlock.ibPYPUnitMasterBlockID, ibPYPUnitMasterBlock.ibPYPUnitMasterID, ibPYPUnitMasterBlock.ibPYPGlossaryID, ibPYPUnitMasterBlock.gibbonOutcomeID, ibPYPUnitMasterBlock.sequenceNumber
+/ibpyp-unit-master-smart-blocks
+Generated from the ibPYPUnitMasterSmartBlock table.
+Requires the IB PYP module	GET POST PATCH PUT DELETE	ibpyp-unit-master-smart-blocks.read
+ibpyp-unit-master-smart-blocks.write	ibPYPUnitMasterSmartBlock.ibPYPUnitMasterSmartBlockID, ibPYPUnitMasterSmartBlock.ibPYPUnitMasterID, ibPYPUnitMasterSmartBlock.type, ibPYPUnitMasterSmartBlock.sequenceNumber
+/ibpyp-unit-masters
+Generated from the ibPYPUnitMaster table.
+Requires the IB PYP module	GET POST PATCH PUT DELETE	ibpyp-unit-masters.read
+ibpyp-unit-masters.write	ibPYPUnitMaster.ibPYPUnitMasterID, ibPYPUnitMaster.gibbonCourseID, ibPYPUnitMaster.timestamp, ibPYPUnitMaster.name, ibPYPUnitMaster.active
+/ibpyp-unit-working-blocks
+Generated from the ibPYPUnitWorkingBlock table.
+Requires the IB PYP module	GET POST PATCH PUT DELETE	ibpyp-unit-working-blocks.read
+ibpyp-unit-working-blocks.write	ibPYPUnitWorkingBlock.ibPYPUnitWorkingBlockID, ibPYPUnitWorkingBlock.ibPYPUnitWorkingID, ibPYPUnitWorkingBlock.ibPYPGlossaryID, ibPYPUnitWorkingBlock.sequenceNumber
+/ibpyp-unit-working-classes
+Generated from the ibPYPUnitWorkingClass table.
+Requires the IB PYP module	GET	ibpyp-unit-working-classes.read	ibPYPUnitWorkingClass.ibPYPUnitWorkingClassID, ibPYPUnitWorkingClass.ibPYPUnitWorkingID, ibPYPUnitWorkingClass.gibbonCourseClassID
+/ibpyp-unit-working-smart-blocks
+Generated from the ibPYPUnitWorkingSmartBlock table.
+Requires the IB PYP module	GET POST PATCH PUT DELETE	ibpyp-unit-working-smart-blocks.read
+ibpyp-unit-working-smart-blocks.write	ibPYPUnitWorkingSmartBlock.ibPYPUnitWorkingSmartBlockID, ibPYPUnitWorkingSmartBlock.ibPYPUnitWorkingID, ibPYPUnitWorkingSmartBlock.gibbonPlannerEntryID, ibPYPUnitWorkingSmartBlock.ibPYPUnitMasterSmartBlockID, ibPYPUnitWorkingSmartBlock.type, ibPYPUnitWorkingSmartBlock.sequenceNumber, ibPYPUnitWorkingSmartBlock.complete
+/ibpyp-unit-workings
+Generated from the ibPYPUnitWorking table.
+Requires the IB PYP module	GET POST PATCH PUT DELETE	ibpyp-unit-workings.read
+ibpyp-unit-workings.write	ibPYPUnitWorking.ibPYPUnitWorkingID, ibPYPUnitWorking.ibPYPUnitMasterID, ibPYPUnitWorking.timestamp, ibPYPUnitWorking.name, ibPYPUnitWorking.gibbonSchoolYearID, ibPYPUnitWorking.dateStart
+Modules: Info Grid
+Endpoint	Methods	مجالات	التصفيات
+/info-grid-entries
+Generated from the infoGridEntry table.
+Requires the Info Grid module	GET POST PATCH PUT DELETE	info-grid-entries.read
+info-grid-entries.write	infoGridEntry.infoGridEntryID, infoGridEntry.staff, infoGridEntry.student, infoGridEntry.parent, infoGridEntry.timestampCreated
+Modules: Mastery Transcript
+Endpoint	Methods	مجالات	التصفيات
+/mastery-transcript-credit-mentors
+Generated from the masteryTranscriptCreditMentor table.
+Requires the Mastery Transcript module	GET POST PATCH PUT DELETE	mastery-transcript-credit-mentors.read
+mastery-transcript-credit-mentors.write	masteryTranscriptCreditMentor.masteryTranscriptCreditMentorID, masteryTranscriptCreditMentor.masteryTranscriptCreditID, masteryTranscriptCreditMentor.gibbonPersonID
+/mastery-transcript-credits
+Generated from the masteryTranscriptCredit table.
+Requires the Mastery Transcript module	GET POST PATCH PUT DELETE	mastery-transcript-credits.read
+mastery-transcript-credits.write	masteryTranscriptCredit.masteryTranscriptCreditID, masteryTranscriptCredit.masteryTranscriptDomainID, masteryTranscriptCredit.name, masteryTranscriptCredit.level, masteryTranscriptCredit.active
+/mastery-transcript-domains
+Generated from the masteryTranscriptDomain table.
+Requires the Mastery Transcript module	GET POST PATCH PUT DELETE	mastery-transcript-domains.read
+mastery-transcript-domains.write	masteryTranscriptDomain.masteryTranscriptDomainID, masteryTranscriptDomain.name, masteryTranscriptDomain.active, masteryTranscriptDomain.sequenceNumber
+/mastery-transcript-journey-logs
+Generated from the masteryTranscriptJourneyLog table.
+Requires the Mastery Transcript module	GET	mastery-transcript-journey-logs.read	masteryTranscriptJourneyLog.masteryTranscriptJourneyLogID, masteryTranscriptJourneyLog.masteryTranscriptJourneyID, masteryTranscriptJourneyLog.gibbonPersonID, masteryTranscriptJourneyLog.type, masteryTranscriptJourneyLog.evidenceType, masteryTranscriptJourneyLog.timestamp
+/mastery-transcript-journeys
+Generated from the masteryTranscriptJourney table.
+Requires the Mastery Transcript module	GET POST PATCH PUT DELETE	mastery-transcript-journeys.read
+mastery-transcript-journeys.write	masteryTranscriptJourney.masteryTranscriptJourneyID, masteryTranscriptJourney.gibbonSchoolYearID, masteryTranscriptJourney.type, masteryTranscriptJourney.masteryTranscriptOpportunityID, masteryTranscriptJourney.masteryTranscriptCreditID, masteryTranscriptJourney.status, masteryTranscriptJourney.timestampJoined, masteryTranscriptJourney.timestampCompletePending, masteryTranscriptJourney.timestampCompleteApproved, masteryTranscriptJourney.evidenceType
+/mastery-transcript-opportunities
+Generated from the masteryTranscriptOpportunity table.
+Requires the Mastery Transcript module	GET POST PATCH PUT DELETE	mastery-transcript-opportunities.read
+mastery-transcript-opportunities.write	masteryTranscriptOpportunity.masteryTranscriptOpportunityID, masteryTranscriptOpportunity.name, masteryTranscriptOpportunity.active
+/mastery-transcript-opportunity-credits
+Generated from the masteryTranscriptOpportunityCredit table.
+Requires the Mastery Transcript module	GET POST PATCH PUT DELETE	mastery-transcript-opportunity-credits.read
+mastery-transcript-opportunity-credits.write	masteryTranscriptOpportunityCredit.masteryTranscriptOpportunityCreditID, masteryTranscriptOpportunityCredit.masteryTranscriptOpportunityID, masteryTranscriptOpportunityCredit.masteryTranscriptCreditID
+/mastery-transcript-opportunity-mentors
+Generated from the masteryTranscriptOpportunityMentor table.
+Requires the Mastery Transcript module	GET POST PATCH PUT DELETE	mastery-transcript-opportunity-mentors.read
+mastery-transcript-opportunity-mentors.write	masteryTranscriptOpportunityMentor.masteryTranscriptOpportunityMentorID, masteryTranscriptOpportunityMentor.masteryTranscriptOpportunityID, masteryTranscriptOpportunityMentor.gibbonPersonID
+/mastery-transcript-transcripts
+Generated from the masteryTranscriptTranscript table.
+Requires the Mastery Transcript module	GET POST PATCH PUT DELETE	mastery-transcript-transcripts.read
+mastery-transcript-transcripts.write	masteryTranscriptTranscript.masteryTranscriptTranscriptID, masteryTranscriptTranscript.gibbonSchoolYearID, masteryTranscriptTranscript.status, masteryTranscriptTranscript.code, masteryTranscriptTranscript.date
+Modules: Meet The Teacher
+Endpoint	Methods	مجالات	التصفيات
+/meet-the-teacher-bookings
+Generated from the meetTheTeacherBooking table.
+Requires the Meet The Teacher module	GET POST PATCH PUT DELETE	meet-the-teacher-bookings.read
+meet-the-teacher-bookings.write	meetTheTeacherBooking.meetTheTeacherBookingID
+/meet-the-teacher-custom-groupses
+Generated from the meetTheTeacherCustomGroups table.
+Requires the Meet The Teacher module	GET POST PATCH PUT DELETE	meet-the-teacher-custom-groupses.read
+meet-the-teacher-custom-groupses.write	meetTheTeacherCustomGroups.ID, meetTheTeacherCustomGroups.TeacherID, meetTheTeacherCustomGroups.StudentID, meetTheTeacherCustomGroups.GroupID
+/meet-the-teacher-logins
+Generated from the meetTheTeacherLogin table.
+Requires the Meet The Teacher module	GET	meet-the-teacher-logins.read	meetTheTeacherLogin.meetTheTeacherLoginID, meetTheTeacherLogin.gibbonPersonID
+Modules: Policies
+Endpoint	Methods	مجالات	التصفيات
+/policies-policies
+Generated from the policiesPolicy table.
+Requires the Policies module	GET POST PATCH PUT DELETE	policies-policies.read
+policies-policies.write	policiesPolicy.policiesPolicyID, policiesPolicy.name, policiesPolicy.nameShort, policiesPolicy.category, policiesPolicy.active, policiesPolicy.scope, policiesPolicy.gibbonDepartmentID, policiesPolicy.type, policiesPolicy.staff, policiesPolicy.student, policiesPolicy.parent, policiesPolicy.timestampCreated
+Modules: Professional Development
+Endpoint	Methods	مجالات	التصفيات
+/pd-requests
+Staff requests to attend professional development, with status and cost.
+Requires the Professional Development module	GET	pd-requests.read	professionalDevelopmentRequests.status, professionalDevelopmentRequests.eventType, professionalDevelopmentRequests.gibbonPersonIDCreated
+/professional-development-portfolio-tags
+Generated from the professionalDevelopmentPortfolioTag table.
+Requires the Professional Development module	GET POST PATCH PUT DELETE	professional-development-portfolio-tags.read
+professional-development-portfolio-tags.write	professionalDevelopmentPortfolioTag.professionalDevelopmentPortfolioTagID
+/professional-development-portfolios
+Generated from the professionalDevelopmentPortfolio table.
+Requires the Professional Development module	GET POST PATCH PUT DELETE	professional-development-portfolios.read
+professional-development-portfolios.write	professionalDevelopmentPortfolio.professionalDevelopmentPortfolioID, professionalDevelopmentPortfolio.professionalDevelopmentRequestID, professionalDevelopmentPortfolio.gibbonPersonID, professionalDevelopmentPortfolio.status, professionalDevelopmentPortfolio.type, professionalDevelopmentPortfolio.completionDate, professionalDevelopmentPortfolio.timestampCreated
+/professional-development-request-approverses
+Generated from the professionalDevelopmentRequestApprovers table.
+Requires the Professional Development module	GET POST PATCH PUT DELETE	professional-development-request-approverses.read
+professional-development-request-approverses.write	professionalDevelopmentRequestApprovers.professionalDevelopmentRequestApproversID, professionalDevelopmentRequestApprovers.gibbonPersonID, professionalDevelopmentRequestApprovers.sequenceNumber
+/professional-development-request-costs
+Generated from the professionalDevelopmentRequestCost table.
+Requires the Professional Development module	GET POST PATCH PUT DELETE	professional-development-request-costs.read
+professional-development-request-costs.write	professionalDevelopmentRequestCost.professionalDevelopmentRequestCostID, professionalDevelopmentRequestCost.professionalDevelopmentRequestID
+/professional-development-request-dayses
+Generated from the professionalDevelopmentRequestDays table.
+Requires the Professional Development module	GET POST PATCH PUT DELETE	professional-development-request-dayses.read
+professional-development-request-dayses.write	professionalDevelopmentRequestDays.professionalDevelopmentRequestDaysID, professionalDevelopmentRequestDays.professionalDevelopmentRequestID, professionalDevelopmentRequestDays.date, professionalDevelopmentRequestDays.allDay
+/professional-development-request-logs
+Generated from the professionalDevelopmentRequestLog table.
+Requires the Professional Development module	GET	professional-development-request-logs.read	professionalDevelopmentRequestLog.professionalDevelopmentRequestLogID, professionalDevelopmentRequestLog.professionalDevelopmentRequestID, professionalDevelopmentRequestLog.gibbonPersonID, professionalDevelopmentRequestLog.requestStatus, professionalDevelopmentRequestLog.timestamp
+/professional-development-request-persons
+Generated from the professionalDevelopmentRequestPerson table.
+Requires the Professional Development module	GET POST PATCH PUT DELETE	professional-development-request-persons.read
+professional-development-request-persons.write	professionalDevelopmentRequestPerson.professionalDevelopmentRequestPersonID, professionalDevelopmentRequestPerson.professionalDevelopmentRequestID, professionalDevelopmentRequestPerson.gibbonPersonID, professionalDevelopmentRequestPerson.gibbonFinanceExpenseID
+/professional-development-resource-tags
+Generated from the professionalDevelopmentResourceTag table.
+Requires the Professional Development module	GET POST PATCH PUT DELETE	professional-development-resource-tags.read
+professional-development-resource-tags.write	professionalDevelopmentResourceTag.professionalDevelopmentResourceTagID
+/professional-development-resources
+Generated from the professionalDevelopmentResource table.
+Requires the Professional Development module	GET POST PATCH PUT DELETE	professional-development-resources.read
+professional-development-resources.write	professionalDevelopmentResource.professionalDevelopmentResourceID, professionalDevelopmentResource.name, professionalDevelopmentResource.category, professionalDevelopmentResource.timestampCreated, professionalDevelopmentResource.timestampModified
+Modules: Query Builder
+Endpoint	Methods	مجالات	التصفيات
+/query-builder-favourites
+Generated from the queryBuilderFavourite table.
+Requires the Query Builder module	GET POST PATCH PUT DELETE	query-builder-favourites.read
+query-builder-favourites.write	queryBuilderFavourite.queryBuilderFavouriteID, queryBuilderFavourite.queryBuilderQueryID, queryBuilderFavourite.gibbonPersonID
+/query-builder-queries
+Generated from the queryBuilderQuery table.
+Requires the Query Builder module	GET POST PATCH PUT DELETE	query-builder-queries.read
+query-builder-queries.write	queryBuilderQuery.queryBuilderQueryID, queryBuilderQuery.type, queryBuilderQuery.context, queryBuilderQuery.scope, queryBuilderQuery.name, queryBuilderQuery.category, queryBuilderQuery.active, queryBuilderQuery.queryID, queryBuilderQuery.gibbonPersonID
+Modules: Stream
+Endpoint	Methods	مجالات	التصفيات
+/stream-categories
+Generated from the streamCategory table.
+Requires the Stream module	GET POST PATCH PUT DELETE	stream-categories.read
+stream-categories.write	streamCategory.streamCategoryID, streamCategory.name, streamCategory.active, streamCategory.sequenceNumber, streamCategory.staffAccess, streamCategory.studentAccess, streamCategory.parentAccess, streamCategory.otherAccess
+/stream-category-vieweds
+Generated from the streamCategoryViewed table.
+Requires the Stream module	GET POST PATCH PUT DELETE	stream-category-vieweds.read
+stream-category-vieweds.write	streamCategoryViewed.streamCategoryViewedID, streamCategoryViewed.gibbonPersonID, streamCategoryViewed.streamCategoryID, streamCategoryViewed.timestamp
+/stream-post-attachments
+Generated from the streamPostAttachment table.
+Requires the Stream module	GET POST PATCH PUT DELETE	stream-post-attachments.read
+stream-post-attachments.write	streamPostAttachment.streamPostAttachmentID, streamPostAttachment.streamPostID, streamPostAttachment.type
+/stream-post-tags
+Generated from the streamPostTag table.
+Requires the Stream module	GET POST PATCH PUT DELETE	stream-post-tags.read
+stream-post-tags.write	streamPostTag.streamPostTagID, streamPostTag.streamPostID
+/stream-posts
+Posts on the school stream.
+Requires the Stream module	GET	stream-posts.read	streamPost.gibbonPersonID
+Modules: Trip Planner
+Endpoint	Methods	مجالات	التصفيات
+/trip-days
+The dates and times a trip runs.
+Requires the Trip Planner module	GET	trip-days.read	tripPlannerRequestDays.tripPlannerRequestID, tripPlannerRequestDays.startDate
+/trip-people
+Staff and students attached to a trip, with their role.
+Requires the Trip Planner module	GET	trip-people.read	tripPlannerRequestPerson.tripPlannerRequestID, tripPlannerRequestPerson.gibbonPersonID, tripPlannerRequestPerson.role
+/trip-planner-approverses
+Generated from the tripPlannerApprovers table.
+Requires the Trip Planner module	GET POST PATCH PUT DELETE	trip-planner-approverses.read
+trip-planner-approverses.write	tripPlannerApprovers.tripPlannerApproverID, tripPlannerApprovers.gibbonPersonID, tripPlannerApprovers.sequenceNumber, tripPlannerApprovers.notifyAllComments
+/trip-planner-cost-breakdowns
+Generated from the tripPlannerCostBreakdown table.
+Requires the Trip Planner module	GET POST PATCH PUT DELETE	trip-planner-cost-breakdowns.read
+trip-planner-cost-breakdowns.write	tripPlannerCostBreakdown.tripPlannerCostBreakdownID, tripPlannerCostBreakdown.tripPlannerRequestID
+/trip-planner-request-covers
+Generated from the tripPlannerRequestCover table.
+Requires the Trip Planner module	GET POST PATCH PUT DELETE	trip-planner-request-covers.read
+trip-planner-request-covers.write	tripPlannerRequestCover.tripPlannerRequestCoverID, tripPlannerRequestCover.tripPlannerRequestID, tripPlannerRequestCover.gibbonCourseClassID
+/trip-planner-request-logs
+Generated from the tripPlannerRequestLog table.
+Requires the Trip Planner module	GET	trip-planner-request-logs.read	tripPlannerRequestLog.tripPlannerRequestLogID, tripPlannerRequestLog.tripPlannerRequestID, tripPlannerRequestLog.gibbonPersonID, tripPlannerRequestLog.action, tripPlannerRequestLog.timestamp
+/trip-planner-risk-templateses
+Generated from the tripPlannerRiskTemplates table.
+Requires the Trip Planner module	GET POST PATCH PUT DELETE	trip-planner-risk-templateses.read
+trip-planner-risk-templateses.write	tripPlannerRiskTemplates.tripPlannerRiskTemplateID, tripPlannerRiskTemplates.name
+/trips
+Trip requests and their approval status.
+Requires the Trip Planner module	GET	trips.read	tripPlannerRequests.status, tripPlannerRequests.creatorPersonID
+Modules: Visual Assessment
+Endpoint	Methods	مجالات	التصفيات
+/visual-assessment-attainments
+Generated from the visualAssessmentAttainment table.
+Requires the Visual Assessment module	GET POST PATCH PUT DELETE	visual-assessment-attainments.read
+visual-assessment-attainments.write	visualAssessmentAttainment.visualAssessmentAttainmentID, visualAssessmentAttainment.visualAssessmentTermID, visualAssessmentAttainment.gibbonPersonID, visualAssessmentAttainment.attainment, visualAssessmentAttainment.timestamp
+/visual-assessment-guides
+Generated from the visualAssessmentGuide table.
+Requires the Visual Assessment module	GET POST PATCH PUT DELETE	visual-assessment-guides.read
+visual-assessment-guides.write	visualAssessmentGuide.visualAssessmentGuideID, visualAssessmentGuide.name, visualAssessmentGuide.category, visualAssessmentGuide.active, visualAssessmentGuide.scope, visualAssessmentGuide.gibbonDepartmentID
+/visual-assessment-terms
+Generated from the visualAssessmentTerm table.
+Requires the Visual Assessment module	GET POST PATCH PUT DELETE	visual-assessment-terms.read
+visual-assessment-terms.write	visualAssessmentTerm.visualAssessmentTermID, visualAssessmentTerm.visualAssessmentGuideID
+Operations
+Endpoint	Methods	مجالات	التصفيات
+/activities
+Extra-curricular activities, their dates, capacity and payment details.
+Requires the Activities module	GET POST PATCH DELETE	activities.read
+activities.write	gibbonActivity.active, gibbonActivity.type, gibbonActivity.gibbonActivityCategoryID, gibbonActivity.provider
+/activity-attendances
+Generated from the gibbonActivityAttendance table.
+Requires the Activities module	GET POST PATCH PUT DELETE	activity-attendances.read
+activity-attendances.write	gibbonActivityAttendance.gibbonActivityAttendanceID, gibbonActivityAttendance.gibbonActivityID, gibbonActivityAttendance.date, gibbonActivityAttendance.timestampTaken
+/activity-categories
+Generated from the gibbonActivityCategory table.
+Requires the Activities module	GET POST PATCH PUT DELETE	activity-categories.read
+activity-categories.write	gibbonActivityCategory.gibbonActivityCategoryID, gibbonActivityCategory.gibbonSchoolYearID, gibbonActivityCategory.name, gibbonActivityCategory.nameShort, gibbonActivityCategory.active, gibbonActivityCategory.viewableDate, gibbonActivityCategory.accessOpenDate, gibbonActivityCategory.accessCloseDate, gibbonActivityCategory.accessEnrolmentDate, gibbonActivityCategory.sequenceNumber
+/activity-choices
+Generated from the gibbonActivityChoice table.
+Requires the Activities module	GET POST PATCH PUT DELETE	activity-choices.read
+activity-choices.write	gibbonActivityChoice.gibbonActivityChoiceID, gibbonActivityChoice.gibbonActivityCategoryID, gibbonActivityChoice.gibbonActivityID, gibbonActivityChoice.gibbonPersonID, gibbonActivityChoice.timestampCreated, gibbonActivityChoice.timestampModified
+/activity-photos
+Generated from the gibbonActivityPhoto table.
+Requires the Activities module	GET POST PATCH PUT DELETE	activity-photos.read
+activity-photos.write	gibbonActivityPhoto.gibbonActivityPhotoID, gibbonActivityPhoto.gibbonActivityID, gibbonActivityPhoto.sequenceNumber
+/activity-slots
+Generated from the gibbonActivitySlot table.
+Requires the Activities module	GET POST PATCH PUT DELETE	activity-slots.read
+activity-slots.write	gibbonActivitySlot.gibbonActivitySlotID, gibbonActivitySlot.gibbonActivityID, gibbonActivitySlot.gibbonSpaceID, gibbonActivitySlot.gibbonDaysOfWeekID, gibbonActivitySlot.timeStart, gibbonActivitySlot.timeEnd
+/activity-staff
+Staff running or assisting with an activity.
+Requires the Activities module	GET POST DELETE	activity-staff.read
+activity-staff.write	gibbonActivityStaff.gibbonActivityID, gibbonActivityStaff.gibbonPersonID, gibbonActivityStaff.role
+/activity-students
+Student sign-ups for an activity and their acceptance status.
+Requires the Activities module	GET POST PATCH DELETE	activity-students.read
+activity-students.write	gibbonActivityStudent.gibbonActivityID, gibbonActivityStudent.gibbonPersonID, gibbonActivityStudent.status
+/activity-types
+Generated from the gibbonActivityType table.
+Requires the School Admin module	GET POST PATCH PUT DELETE	activity-types.read
+activity-types.write	gibbonActivityType.gibbonActivityTypeID, gibbonActivityType.name, gibbonActivityType.access, gibbonActivityType.enrolmentType, gibbonActivityType.waitingList, gibbonActivityType.backupChoice
+/admissions-accounts
+Generated from the gibbonAdmissionsAccount table.
+Requires the Admissions module	GET POST PATCH PUT DELETE	admissions-accounts.read
+admissions-accounts.write	gibbonAdmissionsAccount.gibbonAdmissionsAccountID, gibbonAdmissionsAccount.gibbonPersonID, gibbonAdmissionsAccount.gibbonFamilyID, gibbonAdmissionsAccount.timestampTokenExpire, gibbonAdmissionsAccount.timestampCreated, gibbonAdmissionsAccount.timestampActive
+/admissions-applications
+Generated from the gibbonAdmissionsApplication table.
+Requires the Admissions module	GET POST PATCH PUT DELETE	admissions-applications.read
+admissions-applications.write	gibbonAdmissionsApplication.gibbonAdmissionsApplicationID, gibbonAdmissionsApplication.gibbonFormID, gibbonAdmissionsApplication.gibbonFormPageID, gibbonAdmissionsApplication.gibbonSchoolYearID, gibbonAdmissionsApplication.gibbonYearGroupID, gibbonAdmissionsApplication.gibbonFormGroupID, gibbonAdmissionsApplication.foreignTableID, gibbonAdmissionsApplication.status, gibbonAdmissionsApplication.timestampCreated, gibbonAdmissionsApplication.timestampModified
+/application-form-files
+Generated from the gibbonApplicationFormFile table.
+Requires the Students module	GET POST PATCH PUT DELETE	application-form-files.read
+application-form-files.write	gibbonApplicationFormFile.gibbonApplicationFormFileID, gibbonApplicationFormFile.gibbonApplicationFormID, gibbonApplicationFormFile.name
+/application-form-links
+Generated from the gibbonApplicationFormLink table.
+Requires the Students module	GET POST PATCH PUT DELETE	application-form-links.read
+application-form-links.write	gibbonApplicationFormLink.gibbonApplicationFormLinkID, gibbonApplicationFormLink.timestamp
+/application-form-relationships
+Generated from the gibbonApplicationFormRelationship table.
+Requires the Students module	GET POST PATCH PUT DELETE	application-form-relationships.read
+application-form-relationships.write	gibbonApplicationFormRelationship.gibbonApplicationFormRelationshipID, gibbonApplicationFormRelationship.gibbonApplicationFormID, gibbonApplicationFormRelationship.gibbonPersonID
+/application-forms
+Generated from the gibbonApplicationForm table.
+Requires the Students module	GET POST PATCH PUT DELETE	application-forms.read
+application-forms.write	gibbonApplicationForm.gibbonApplicationFormID, gibbonApplicationForm.gender, gibbonApplicationForm.status, gibbonApplicationForm.dob, gibbonApplicationForm.phone1Type, gibbonApplicationForm.phone2Type, gibbonApplicationForm.schoolDate1, gibbonApplicationForm.schoolDate2, gibbonApplicationForm.gibbonFamilyID, gibbonApplicationForm.siblingDOB1, gibbonApplicationForm.siblingSchoolJoiningDate1, gibbonApplicationForm.siblingDOB2, gibbonApplicationForm.siblingSchoolJoiningDate2, gibbonApplicationForm.siblingDOB3, gibbonApplicationForm.siblingSchoolJoiningDate3, gibbonApplicationForm.sen, gibbonApplicationForm.scholarshipInterest, gibbonApplicationForm.scholarshipRequired, gibbonApplicationForm.payment, gibbonApplicationForm.companyCCFamily, gibbonApplicationForm.companyAll, gibbonApplicationForm.agreement, gibbonApplicationForm.parent1gibbonPersonID, gibbonApplicationForm.parent1gender, gibbonApplicationForm.parent1phone1Type, gibbonApplicationForm.parent1phone2Type, gibbonApplicationForm.parent2gender, gibbonApplicationForm.parent2phone1Type, gibbonApplicationForm.parent2phone2Type, gibbonApplicationForm.timestamp
+/budgets
+Departmental and school budgets.
+Requires the Finance module	GET	budgets.read	gibbonFinanceBudget.active, gibbonFinanceBudget.category
+/calendar-editors
+Generated from the gibbonCalendarEditor table.
+Requires the Calendar module	GET POST PATCH PUT DELETE	calendar-editors.read
+calendar-editors.write	gibbonCalendarEditor.gibbonCalendarEditorID, gibbonCalendarEditor.gibbonCalendarID, gibbonCalendarEditor.gibbonPersonID, gibbonCalendarEditor.editAllEvents
+/calendar-event-persons
+Generated from the gibbonCalendarEventPerson table.
+Requires the Calendar module	GET POST PATCH PUT DELETE	calendar-event-persons.read
+calendar-event-persons.write	gibbonCalendarEventPerson.gibbonCalendarEventPersonID, gibbonCalendarEventPerson.gibbonCalendarEventID, gibbonCalendarEventPerson.gibbonPersonID, gibbonCalendarEventPerson.role, gibbonCalendarEventPerson.timestampCreated, gibbonCalendarEventPerson.timestampModified
+/calendar-event-types
+Generated from the gibbonCalendarEventType table.
+Requires the Activities module	GET POST PATCH PUT DELETE	calendar-event-types.read
+calendar-event-types.write	gibbonCalendarEventType.gibbonCalendarEventTypeID, gibbonCalendarEventType.type, gibbonCalendarEventType.sequenceNumber
+/calendar-events
+Events on a school calendar, with location and timing.
+Requires the School Admin module	GET POST PATCH DELETE	calendar-events.read
+calendar-events.write	gibbonCalendarEvent.gibbonCalendarID, gibbonCalendarEvent.status, gibbonCalendarEvent.dateStart, gibbonCalendarEvent.gibbonSpaceID
+/expenses
+Expense requests and their approval and payment status.
+Requires the Finance module	GET	expenses.read	gibbonFinanceExpense.status, gibbonFinanceExpense.gibbonFinanceBudgetID, gibbonFinanceExpense.gibbonFinanceBudgetCycleID
+/fees
+The fee catalogue for a school year.
+Requires the Finance module	GET	fees.read	gibbonFinanceFee.active, gibbonFinanceFee.gibbonFinanceFeeCategoryID
+/finance-billing-schedules
+Generated from the gibbonFinanceBillingSchedule table.
+Requires the Finance module	GET POST PATCH PUT DELETE	finance-billing-schedules.read
+finance-billing-schedules.write	gibbonFinanceBillingSchedule.gibbonFinanceBillingScheduleID, gibbonFinanceBillingSchedule.gibbonSchoolYearID, gibbonFinanceBillingSchedule.name, gibbonFinanceBillingSchedule.active, gibbonFinanceBillingSchedule.invoiceIssueDate, gibbonFinanceBillingSchedule.invoiceDueDate, gibbonFinanceBillingSchedule.timestampCreator, gibbonFinanceBillingSchedule.timestampUpdate
+/finance-budget-cycle-allocations
+Generated from the gibbonFinanceBudgetCycleAllocation table.
+Requires the Finance module	GET POST PATCH PUT DELETE	finance-budget-cycle-allocations.read
+finance-budget-cycle-allocations.write	gibbonFinanceBudgetCycleAllocation.gibbonFinanceBudgetCycleAllocationID, gibbonFinanceBudgetCycleAllocation.gibbonFinanceBudgetID, gibbonFinanceBudgetCycleAllocation.gibbonFinanceBudgetCycleID
+/finance-budget-cycles
+Generated from the gibbonFinanceBudgetCycle table.
+Requires the Finance module	GET POST PATCH PUT DELETE	finance-budget-cycles.read
+finance-budget-cycles.write	gibbonFinanceBudgetCycle.gibbonFinanceBudgetCycleID, gibbonFinanceBudgetCycle.name, gibbonFinanceBudgetCycle.status, gibbonFinanceBudgetCycle.dateStart, gibbonFinanceBudgetCycle.dateEnd, gibbonFinanceBudgetCycle.sequenceNumber, gibbonFinanceBudgetCycle.timestampCreator, gibbonFinanceBudgetCycle.timestampUpdate
+/finance-budget-persons
+Generated from the gibbonFinanceBudgetPerson table.
+Requires the Finance module	GET POST PATCH PUT DELETE	finance-budget-persons.read
+finance-budget-persons.write	gibbonFinanceBudgetPerson.gibbonFinanceBudgetPersonID, gibbonFinanceBudgetPerson.gibbonFinanceBudgetID, gibbonFinanceBudgetPerson.gibbonPersonID, gibbonFinanceBudgetPerson.access
+/finance-expense-approvers
+Generated from the gibbonFinanceExpenseApprover table.
+Requires the Finance module	GET POST PATCH PUT DELETE	finance-expense-approvers.read
+finance-expense-approvers.write	gibbonFinanceExpenseApprover.gibbonFinanceExpenseApproverID, gibbonFinanceExpenseApprover.gibbonPersonID, gibbonFinanceExpenseApprover.sequenceNumber, gibbonFinanceExpenseApprover.timestampCreator, gibbonFinanceExpenseApprover.timestampUpdate
+/finance-expense-logs
+Generated from the gibbonFinanceExpenseLog table.
+Requires the Finance module	GET	finance-expense-logs.read	gibbonFinanceExpenseLog.gibbonFinanceExpenseLogID, gibbonFinanceExpenseLog.gibbonFinanceExpenseID, gibbonFinanceExpenseLog.gibbonPersonID, gibbonFinanceExpenseLog.timestamp, gibbonFinanceExpenseLog.action
+/finance-fee-categories
+Generated from the gibbonFinanceFeeCategory table.
+Requires the Finance module	GET POST PATCH PUT DELETE	finance-fee-categories.read
+finance-fee-categories.write	gibbonFinanceFeeCategory.gibbonFinanceFeeCategoryID, gibbonFinanceFeeCategory.name, gibbonFinanceFeeCategory.nameShort, gibbonFinanceFeeCategory.active, gibbonFinanceFeeCategory.timestampCreator, gibbonFinanceFeeCategory.timestampUpdate
+/finance-invoicee-updates
+Generated from the gibbonFinanceInvoiceeUpdate table.
+Requires the Data Updater module	GET POST PATCH PUT DELETE	finance-invoicee-updates.read
+finance-invoicee-updates.write	gibbonFinanceInvoiceeUpdate.gibbonFinanceInvoiceeUpdateID, gibbonFinanceInvoiceeUpdate.gibbonSchoolYearID, gibbonFinanceInvoiceeUpdate.status, gibbonFinanceInvoiceeUpdate.gibbonFinanceInvoiceeID, gibbonFinanceInvoiceeUpdate.invoiceTo, gibbonFinanceInvoiceeUpdate.companyCCFamily, gibbonFinanceInvoiceeUpdate.companyAll, gibbonFinanceInvoiceeUpdate.timestamp
+/finance-invoicees
+Generated from the gibbonFinanceInvoicee table.
+Requires the Finance module	GET POST PATCH PUT DELETE	finance-invoicees.read
+finance-invoicees.write	gibbonFinanceInvoicee.gibbonFinanceInvoiceeID, gibbonFinanceInvoicee.gibbonPersonID, gibbonFinanceInvoicee.invoiceTo, gibbonFinanceInvoicee.companyCCFamily, gibbonFinanceInvoicee.companyAll
+/finance-petty-cashes
+Generated from the gibbonFinancePettyCash table.
+Requires the Finance module	GET POST PATCH PUT DELETE	finance-petty-cashes.read
+finance-petty-cashes.write	gibbonFinancePettyCash.gibbonFinancePettyCashID, gibbonFinancePettyCash.gibbonPersonID, gibbonFinancePettyCash.timestampCreated, gibbonFinancePettyCash.timestampStatus, gibbonFinancePettyCash.status
+/form-fields
+Generated from the gibbonFormField table.
+Requires the Staff module	GET POST PATCH PUT DELETE	form-fields.read
+form-fields.write	gibbonFormField.gibbonFormFieldID, gibbonFormField.gibbonFormPageID, gibbonFormField.required, gibbonFormField.hidden, gibbonFormField.prefill, gibbonFormField.sequenceNumber
+/form-pages
+Generated from the gibbonFormPage table.
+Requires the Admissions module	GET POST PATCH PUT DELETE	form-pages.read
+form-pages.write	gibbonFormPage.gibbonFormPageID, gibbonFormPage.gibbonFormID, gibbonFormPage.name, gibbonFormPage.sequenceNumber
+/form-submissions
+Submitted form data and its workflow status.
+Requires the Form Builder module	GET	form-submissions.read	gibbonFormSubmission.gibbonFormID, gibbonFormSubmission.status, gibbonFormSubmission.foreignTable, gibbonFormSubmission.foreignTableID
+/form-uploads
+Generated from the gibbonFormUpload table.
+Requires the System Admin module	GET POST PATCH PUT DELETE	form-uploads.read
+form-uploads.write	gibbonFormUpload.gibbonFormUploadID, gibbonFormUpload.gibbonFormID, gibbonFormUpload.gibbonFormFieldID, gibbonFormUpload.foreignTableID, gibbonFormUpload.name, gibbonFormUpload.confirmed, gibbonFormUpload.timestamp
+/forms
+Forms built with the form builder.
+Requires the Form Builder module	GET	forms.read	gibbonForm.active, gibbonForm.public, gibbonForm.type
+/group-persons
+Generated from the gibbonGroupPerson table.
+Requires the Messenger module	GET POST PATCH PUT DELETE	group-persons.read
+group-persons.write	gibbonGroupPerson.gibbonGroupPersonID, gibbonGroupPerson.gibbonGroupID, gibbonGroupPerson.gibbonPersonID
+/groups
+Generated from the gibbonGroup table.
+Requires the Messenger module	GET POST PATCH PUT DELETE	groups.read
+groups.write	gibbonGroup.gibbonGroupID, gibbonGroup.gibbonSchoolYearID, gibbonGroup.name, gibbonGroup.timestampCreated, gibbonGroup.timestampUpdated
+/invoice-fees
+Line items on an invoice.
+Requires the Finance module	GET	invoice-fees.read	gibbonFinanceInvoiceFee.gibbonFinanceInvoiceID
+/invoices
+Invoices issued to invoicees, with status and payment details.
+Requires the Finance module	GET	invoices.read	gibbonFinanceInvoice.status, gibbonFinanceInvoice.gibbonFinanceInvoiceeID, gibbonFinanceInvoicee.gibbonPersonID, gibbonFinanceInvoice.invoiceDueDate
+/library-events
+Loan and return history for library items.
+Requires the Library module	GET	library-events.read	gibbonLibraryItemEvent.gibbonLibraryItemID, gibbonLibraryItemEvent.type
+/library-items
+Library catalogue: books, devices and other borrowable assets.
+Requires the Library module	GET POST PATCH	library-items.read
+library-items.write	gibbonLibraryItem.status, gibbonLibraryItem.gibbonLibraryTypeID, gibbonLibraryItem.borrowable, gibbonLibraryItem.gibbonSpaceID, gibbonLibraryItem.gibbonPersonIDStatusResponsible, gibbonLibraryItem.id
+/library-shelf-items
+Generated from the gibbonLibraryShelfItem table.
+Requires the Library module	GET POST PATCH PUT DELETE	library-shelf-items.read
+library-shelf-items.write	gibbonLibraryShelfItem.gibbonLibraryShelfItemID, gibbonLibraryShelfItem.gibbonLibraryItemID, gibbonLibraryShelfItem.gibbonLibraryShelfID
+/library-shelfs
+Generated from the gibbonLibraryShelf table.
+Requires the Library module	GET POST PATCH PUT DELETE	library-shelfs.read
+library-shelfs.write	gibbonLibraryShelf.gibbonLibraryShelfID, gibbonLibraryShelf.name, gibbonLibraryShelf.active, gibbonLibraryShelf.shuffle, gibbonLibraryShelf.type, gibbonLibraryShelf.sequenceNumber
+/library-types
+Generated from the gibbonLibraryType table.
+Requires the Library module	GET POST PATCH PUT DELETE	library-types.read
+library-types.write	gibbonLibraryType.gibbonLibraryTypeID, gibbonLibraryType.name, gibbonLibraryType.active
+/message-receipts
+Delivery and read receipts for a message.
+Requires the Messenger module	GET	message-receipts.read	gibbonMessengerReceipt.gibbonMessengerID, gibbonMessengerReceipt.gibbonPersonID, gibbonMessengerReceipt.sent, gibbonMessengerReceipt.confirmed
+/messages
+Messenger broadcasts: email, SMS and message wall posts.
+Requires the Messenger module	GET	messages.read	gibbonMessenger.status, gibbonMessenger.gibbonPersonID, gibbonMessenger.messageWall, gibbonMessenger.email
+/messenger-canned-responses
+Generated from the gibbonMessengerCannedResponse table.
+Requires the Messenger module	GET POST PATCH PUT DELETE	messenger-canned-responses.read
+messenger-canned-responses.write	gibbonMessengerCannedResponse.gibbonMessengerCannedResponseID, gibbonMessengerCannedResponse.timestampCreator
+/messenger-mailing-list-recipients
+Generated from the gibbonMessengerMailingListRecipient table.
+Requires the Messenger module	GET POST PATCH PUT DELETE	messenger-mailing-list-recipients.read
+messenger-mailing-list-recipients.write	gibbonMessengerMailingListRecipient.gibbonMessengerMailingListRecipientID, gibbonMessengerMailingListRecipient.timestampCreated
+/messenger-mailing-lists
+Generated from the gibbonMessengerMailingList table.
+Requires the Messenger module	GET POST PATCH PUT DELETE	messenger-mailing-lists.read
+messenger-mailing-lists.write	gibbonMessengerMailingList.gibbonMessengerMailingListID, gibbonMessengerMailingList.name, gibbonMessengerMailingList.active, gibbonMessengerMailingList.timestampCreated
+/messenger-targets
+Generated from the gibbonMessengerTarget table.
+Requires the Messenger module	GET POST PATCH PUT DELETE	messenger-targets.read
+messenger-targets.write	gibbonMessengerTarget.gibbonMessengerTargetID, gibbonMessengerTarget.gibbonMessengerID, gibbonMessengerTarget.type, gibbonMessengerTarget.parents, gibbonMessengerTarget.students, gibbonMessengerTarget.staff
+/payments
+Generated from the gibbonPayment table.
+Requires the Students module	GET POST PATCH PUT DELETE	payments.read
+payments.write	gibbonPayment.gibbonPaymentID, gibbonPayment.foreignTableID, gibbonPayment.gibbonPersonID, gibbonPayment.type, gibbonPayment.status, gibbonPayment.onlineTransactionStatus, gibbonPayment.timestamp
+/resource-tags
+Generated from the gibbonResourceTag table.
+Requires the Planner module	GET POST PATCH PUT DELETE	resource-tags.read
+resource-tags.write	gibbonResourceTag.gibbonResourceTagID
+/resources
+Generated from the gibbonResource table.
+Requires the Planner module	GET POST PATCH PUT DELETE	resources.read
+resources.write	gibbonResource.gibbonResourceID, gibbonResource.name, gibbonResource.type, gibbonResource.category, gibbonResource.gibbonPersonID, gibbonResource.timestamp
+/staff-absence-dates
+The individual dates covered by a staff absence.
+Requires the Staff module	GET	staff-absence-dates.read	gibbonStaffAbsenceDate.gibbonStaffAbsenceID, gibbonStaffAbsenceDate.date, gibbonStaffAbsence.gibbonPersonID
+/staff-absences
+Staff absences, their type, status and whether cover is required.
+Requires the Staff module	GET	staff-absences.read	gibbonStaffAbsence.gibbonPersonID, gibbonStaffAbsence.status, gibbonStaffAbsence.coverageRequired, gibbonStaffAbsence.gibbonStaffAbsenceTypeID
+/staff-coverage
+Cover requests and the staff assigned to them.
+Requires the Staff module	GET	staff-coverage.read	gibbonStaffCoverage.gibbonStaffAbsenceID, gibbonStaffCoverage.status, gibbonStaffCoverage.gibbonPersonIDCoverage
+/staff-duties
+Duty rosters such as playground and bus duty.
+Requires the Staff module	GET	staff-duties.read	gibbonStaffDuty.type
+People
+Endpoint	Methods	مجالات	التصفيات
+/districts
+Generated from the gibbonDistrict table.
+Requires the User Admin module	GET POST PATCH PUT DELETE	districts.read
+districts.write	gibbonDistrict.gibbonDistrictID, gibbonDistrict.name
+/families
+Family units, their home address and status.
+Requires the User Admin module	GET POST PATCH	families.read
+families.write	gibbonFamily.status
+/family-adults
+Adults (usually parents and guardians) attached to a family, with their contact priority.
+Requires the User Admin module	GET POST PATCH DELETE	family-adults.read
+family-adults.write	gibbonFamilyAdult.gibbonFamilyID, gibbonFamilyAdult.gibbonPersonID, gibbonFamilyAdult.childDataAccess
+/family-children
+Children attached to a family.
+Requires the User Admin module	GET POST PATCH DELETE	family-children.read
+family-children.write	gibbonFamilyChild.gibbonFamilyID, gibbonFamilyChild.gibbonPersonID
+/family-relationships
+Generated from the gibbonFamilyRelationship table.
+Requires the User Admin module	GET POST PATCH PUT DELETE	family-relationships.read
+family-relationships.write	gibbonFamilyRelationship.gibbonFamilyRelationshipID, gibbonFamilyRelationship.gibbonFamilyID
+/family-updates
+Generated from the gibbonFamilyUpdate table.
+Requires the Data Updater module	GET POST PATCH PUT DELETE	family-updates.read
+family-updates.write	gibbonFamilyUpdate.gibbonFamilyUpdateID, gibbonFamilyUpdate.gibbonSchoolYearID, gibbonFamilyUpdate.status, gibbonFamilyUpdate.gibbonFamilyID, gibbonFamilyUpdate.timestamp
+/person-medical-condition-updates
+Generated from the gibbonPersonMedicalConditionUpdate table.
+Requires the Students module	GET POST PATCH PUT DELETE	person-medical-condition-updates.read
+person-medical-condition-updates.write	gibbonPersonMedicalConditionUpdate.gibbonPersonMedicalConditionUpdateID, gibbonPersonMedicalConditionUpdate.gibbonPersonMedicalUpdateID, gibbonPersonMedicalConditionUpdate.gibbonPersonMedicalConditionID, gibbonPersonMedicalConditionUpdate.gibbonPersonMedicalID, gibbonPersonMedicalConditionUpdate.name, gibbonPersonMedicalConditionUpdate.gibbonAlertLevelID, gibbonPersonMedicalConditionUpdate.lastEpisode, gibbonPersonMedicalConditionUpdate.timestamp
+/person-medical-updates
+Generated from the gibbonPersonMedicalUpdate table.
+Requires the Data Updater module	GET POST PATCH PUT DELETE	person-medical-updates.read
+person-medical-updates.write	gibbonPersonMedicalUpdate.gibbonPersonMedicalUpdateID, gibbonPersonMedicalUpdate.gibbonSchoolYearID, gibbonPersonMedicalUpdate.status, gibbonPersonMedicalUpdate.gibbonPersonMedicalID, gibbonPersonMedicalUpdate.gibbonPersonID, gibbonPersonMedicalUpdate.longTermMedication, gibbonPersonMedicalUpdate.timestamp
+/person-photos
+Generated from the gibbonPersonPhoto table.
+Requires the System Admin module	GET POST PATCH PUT DELETE	person-photos.read
+person-photos.write	gibbonPersonPhoto.gibbonPersonPhotoID, gibbonPersonPhoto.gibbonSchoolYearID, gibbonPersonPhoto.gibbonPersonID, gibbonPersonPhoto.timestamp
+/person-resets
+Generated from the gibbonPersonReset table.
+Requires the User Admin module	GET POST PATCH PUT DELETE	person-resets.read
+person-resets.write	gibbonPersonReset.gibbonPersonResetID, gibbonPersonReset.gibbonPersonID, gibbonPersonReset.timestamp
+/person-status-logs
+Generated from the gibbonPersonStatusLog table.
+Requires the User Admin module	GET	person-status-logs.read	gibbonPersonStatusLog.gibbonPersonStatusLogID, gibbonPersonStatusLog.gibbonPersonID, gibbonPersonStatusLog.statusOld, gibbonPersonStatusLog.statusNew, gibbonPersonStatusLog.timestamp
+/person-updates
+Generated from the gibbonPersonUpdate table.
+Requires the Data Updater module	GET POST PATCH PUT DELETE	person-updates.read
+person-updates.write	gibbonPersonUpdate.gibbonPersonUpdateID, gibbonPersonUpdate.gibbonSchoolYearID, gibbonPersonUpdate.status, gibbonPersonUpdate.gibbonPersonID, gibbonPersonUpdate.dob, gibbonPersonUpdate.phone1Type, gibbonPersonUpdate.phone3Type, gibbonPersonUpdate.phone2Type, gibbonPersonUpdate.phone4Type, gibbonPersonUpdate.timestamp
+/personal-document-types
+Generated from the gibbonPersonalDocumentType table.
+Requires the User Admin module	GET POST PATCH PUT DELETE	personal-document-types.read
+personal-document-types.write	gibbonPersonalDocumentType.gibbonPersonalDocumentTypeID, gibbonPersonalDocumentType.name, gibbonPersonalDocumentType.active, gibbonPersonalDocumentType.type, gibbonPersonalDocumentType.document, gibbonPersonalDocumentType.required, gibbonPersonalDocumentType.sequenceNumber
+/personal-documents
+Passports, visas and other personal documents recorded against a person. Sensitive.
+Requires the User Admin module	GET	personal-documents.read	gibbonPersonalDocument.foreignTable, gibbonPersonalDocument.foreignTableID, gibbonPersonalDocument.gibbonPersonalDocumentTypeID
+/roles
+Gibbon roles and their categories, which drive all permissions.
+Requires the User Admin module	GET	roles.read	gibbonRole.category, gibbonRole.type
+/staff
+Staff records joined to their person record.
+Requires the Staff module	GET POST PATCH	staff.read
+staff.write	gibbonStaff.type, gibbonPerson.status, gibbonStaff.gibbonPersonID, gibbonStaff.firstAidQualified
+/staff-absence-types
+Generated from the gibbonStaffAbsenceType table.
+Requires the Staff module	GET POST PATCH PUT DELETE	staff-absence-types.read
+staff-absence-types.write	gibbonStaffAbsenceType.gibbonStaffAbsenceTypeID, gibbonStaffAbsenceType.name, gibbonStaffAbsenceType.nameShort, gibbonStaffAbsenceType.active, gibbonStaffAbsenceType.requiresApproval, gibbonStaffAbsenceType.sequenceNumber
+/staff-application-form-files
+Generated from the gibbonStaffApplicationFormFile table.
+Requires the Staff module	GET POST PATCH PUT DELETE	staff-application-form-files.read
+staff-application-form-files.write	gibbonStaffApplicationFormFile.gibbonStaffApplicationFormFileID, gibbonStaffApplicationFormFile.gibbonStaffApplicationFormID, gibbonStaffApplicationFormFile.name
+/staff-application-forms
+Generated from the gibbonStaffApplicationForm table.
+Requires the Staff module	GET POST PATCH PUT DELETE	staff-application-forms.read
+staff-application-forms.write	gibbonStaffApplicationForm.gibbonStaffApplicationFormID, gibbonStaffApplicationForm.gibbonStaffJobOpeningID, gibbonStaffApplicationForm.gibbonPersonID, gibbonStaffApplicationForm.gender, gibbonStaffApplicationForm.status, gibbonStaffApplicationForm.dob, gibbonStaffApplicationForm.phone1Type, gibbonStaffApplicationForm.agreement, gibbonStaffApplicationForm.timestamp, gibbonStaffApplicationForm.dateStart
+/staff-contracts
+Employment contracts, including salary and allowance details. Highly sensitive.
+Requires the Staff module	GET	staff-contracts.read	gibbonStaffContract.gibbonStaffID, gibbonStaffContract.status, gibbonStaff.gibbonPersonID
+/staff-coverage-dates
+Generated from the gibbonStaffCoverageDate table.
+Requires the Staff module	GET POST PATCH PUT DELETE	staff-coverage-dates.read
+staff-coverage-dates.write	gibbonStaffCoverageDate.gibbonStaffCoverageDateID, gibbonStaffCoverageDate.gibbonStaffCoverageID, gibbonStaffCoverageDate.gibbonStaffAbsenceDateID, gibbonStaffCoverageDate.foreignTableID, gibbonStaffCoverageDate.date, gibbonStaffCoverageDate.allDay, gibbonStaffCoverageDate.timeStart, gibbonStaffCoverageDate.timeEnd
+/staff-duty-persons
+Generated from the gibbonStaffDutyPerson table.
+Requires the Staff module	GET POST PATCH PUT DELETE	staff-duty-persons.read
+staff-duty-persons.write	gibbonStaffDutyPerson.gibbonStaffDutyPersonID, gibbonStaffDutyPerson.gibbonStaffDutyID, gibbonStaffDutyPerson.gibbonDaysOfWeekID, gibbonStaffDutyPerson.gibbonPersonID
+/staff-job-openings
+Generated from the gibbonStaffJobOpening table.
+Requires the Staff module	GET POST PATCH PUT DELETE	staff-job-openings.read
+staff-job-openings.write	gibbonStaffJobOpening.gibbonStaffJobOpeningID, gibbonStaffJobOpening.type, gibbonStaffJobOpening.dateOpen, gibbonStaffJobOpening.active, gibbonStaffJobOpening.timestampCreator
+/staff-updates
+Generated from the gibbonStaffUpdate table.
+Requires the Data Updater module	GET POST PATCH PUT DELETE	staff-updates.read
+staff-updates.write	gibbonStaffUpdate.gibbonStaffUpdateID, gibbonStaffUpdate.gibbonSchoolYearID, gibbonStaffUpdate.gibbonStaffID, gibbonStaffUpdate.status, gibbonStaffUpdate.type, gibbonStaffUpdate.firstAidQualified, gibbonStaffUpdate.firstAidExpiry, gibbonStaffUpdate.timestamp
+/students
+Student enrolment records: one row per student per school year, joined to the person record.
+Requires the Students module	GET POST PATCH DELETE	students.read
+students.write	gibbonStudentEnrolment.gibbonPersonID, gibbonStudentEnrolment.gibbonYearGroupID, gibbonStudentEnrolment.gibbonFormGroupID, gibbonPerson.gibbonHouseID, gibbonPerson.status, gibbonPerson.gender, gibbonPerson.studentID
+/substitutes
+Generated from the gibbonSubstitute table.
+Requires the Staff module	GET POST PATCH PUT DELETE	substitutes.read
+substitutes.write	gibbonSubstitute.gibbonSubstituteID, gibbonSubstitute.gibbonPersonID, gibbonSubstitute.active, gibbonSubstitute.type
+/username-formats
+Generated from the gibbonUsernameFormat table.
+Requires the User Admin module	GET POST PATCH PUT DELETE	username-formats.read
+username-formats.write	gibbonUsernameFormat.gibbonUsernameFormatID, gibbonUsernameFormat.isDefault, gibbonUsernameFormat.isNumeric
+/users
+Every person record in Gibbon: staff, students, parents and other users.
+Requires the User Admin module	GET POST PATCH	users.read
+users.write	gibbonPerson.status, gibbonPerson.canLogin, gibbonPerson.gibbonRoleIDPrimary, gibbonRole.category, gibbonPerson.gender, gibbonPerson.gibbonHouseID, gibbonPerson.username, gibbonPerson.email, gibbonPerson.studentID
+School
+Endpoint	Methods	مجالات	التصفيات
+/calendars
+School calendars and their visibility settings.
+Requires the School Admin module	GET	calendars.read	gibbonCalendar.public
+/days-of-weeks
+Generated from the gibbonDaysOfWeek table.
+Requires the School Admin module	GET POST PATCH PUT DELETE	days-of-weeks.read
+days-of-weeks.write	gibbonDaysOfWeek.gibbonDaysOfWeekID, gibbonDaysOfWeek.name, gibbonDaysOfWeek.nameShort, gibbonDaysOfWeek.sequenceNumber, gibbonDaysOfWeek.schoolDay, gibbonDaysOfWeek.schoolOpen, gibbonDaysOfWeek.schoolStart, gibbonDaysOfWeek.schoolEnd, gibbonDaysOfWeek.schoolClose
+/department-resources
+Generated from the gibbonDepartmentResource table.
+Requires the School Admin module	GET POST PATCH PUT DELETE	department-resources.read
+department-resources.write	gibbonDepartmentResource.gibbonDepartmentResourceID, gibbonDepartmentResource.gibbonDepartmentID, gibbonDepartmentResource.type, gibbonDepartmentResource.name
+/department-staff
+Staff membership of departments, with their departmental role.
+Requires the Departments module	GET POST DELETE	department-staff.read
+department-staff.write	gibbonDepartmentStaff.gibbonDepartmentID, gibbonDepartmentStaff.gibbonPersonID, gibbonDepartmentStaff.role
+/departments
+Learning areas and administrative departments.
+Requires the Departments module	GET	departments.read	gibbonDepartment.type
+/form-groups
+Form groups (tutor groups) for a school year, with tutors and room.
+Requires the School Admin module	GET	form-groups.read	gibbonFormGroup.gibbonPersonIDTutor
+/grade-scale-grades
+Individual grades within a scale.
+Requires the School Admin module	GET	grade-scale-grades.read	gibbonScaleGrade.gibbonScaleID
+/grade-scales
+Grading scales used across markbook and assessment.
+Requires the School Admin module	GET	grade-scales.read	gibbonScale.active, gibbonScale.usage
+/houses
+School houses.
+Requires the School Admin module	GET	houses.read	—
+/school-terms
+Terms and semesters within a school year.
+Requires the School Admin module	GET	school-terms.read	—
+/school-years
+Academic years, with the current year flagged by status.
+Requires the School Admin module	GET	school-years.read	gibbonSchoolYear.status
+/space-persons
+Generated from the gibbonSpacePerson table.
+Requires the School Admin module	GET POST PATCH PUT DELETE	space-persons.read
+space-persons.write	gibbonSpacePerson.gibbonSpacePersonID, gibbonSpacePerson.gibbonSpaceID, gibbonSpacePerson.gibbonPersonID, gibbonSpacePerson.usageType
+/spaces
+Rooms and facilities, including capacity and equipment.
+Requires the School Admin module	GET	spaces.read	gibbonSpace.active, gibbonSpace.bookable, gibbonSpace.type
+/special-days
+School closures, holidays and timing variations.
+Requires the School Admin module	GET	special-days.read	gibbonSchoolYearSpecialDay.type, gibbonSchoolYearSpecialDay.date
+/year-groups
+Year groups (grades) and their head of year.
+Requires the School Admin module	GET	year-groups.read	—
+System
+Endpoint	Methods	مجالات	التصفيات
+/actions
+Module actions, the unit Gibbon grants permissions against.
+Requires the System Admin module	GET	actions.read	gibbonAction.gibbonModuleID, gibbonAction.category, gibbonAction.menuShow
+/alarm-confirms
+Generated from the gibbonAlarmConfirm table.
+Requires the System Admin module	GET POST PATCH PUT DELETE	alarm-confirms.read
+alarm-confirms.write	gibbonAlarmConfirm.gibbonAlarmConfirmID, gibbonAlarmConfirm.gibbonAlarmID, gibbonAlarmConfirm.gibbonPersonID, gibbonAlarmConfirm.timestamp
+/alarms
+Generated from the gibbonAlarm table.
+Requires the System Admin module	GET POST PATCH PUT DELETE	alarms.read
+alarms.write	gibbonAlarm.gibbonAlarmID, gibbonAlarm.type, gibbonAlarm.status, gibbonAlarm.gibbonPersonID, gibbonAlarm.timestampStart, gibbonAlarm.timestampEnd
+/api-logs
+This add-on own request log: every API call, its key, status and duration.
+Requires the Rest API module	GET	api-logs.read	restApiLog.restApiKeyID, restApiLog.statusCode, restApiLog.method, restApiLog.resource, restApiLog.gibbonPersonID
+/countries
+Generated from the gibbonCountry table.
+Requires the System Admin module	GET POST PATCH PUT DELETE	countries.read
+countries.write	gibbonCountry.printable_name
+/custom-fields
+Custom field definitions, needed to interpret the "fields" column on other resources.
+Requires the System Admin module	GET	custom-fields.read	gibbonCustomField.context, gibbonCustomField.active, gibbonCustomField.type
+/data-retentions
+Generated from the gibbonDataRetention table.
+Requires the User Admin module	GET POST PATCH PUT DELETE	data-retentions.read
+data-retentions.write	gibbonDataRetention.gibbonDataRetentionID, gibbonDataRetention.gibbonPersonID, gibbonDataRetention.status, gibbonDataRetention.timestamp
+/discussions
+Generated from the gibbonDiscussion table.
+Requires the Crowd Assessment module	GET POST PATCH PUT DELETE	discussions.read
+discussions.write	gibbonDiscussion.gibbonDiscussionID, gibbonDiscussion.foreignTableID, gibbonDiscussion.gibbonModuleID, gibbonDiscussion.gibbonPersonID, gibbonDiscussion.type, gibbonDiscussion.attachmentType, gibbonDiscussion.timestamp
+/email-templates
+Generated from the gibbonEmailTemplate table.
+Requires the System Admin module	GET POST PATCH PUT DELETE	email-templates.read
+email-templates.write	gibbonEmailTemplate.gibbonEmailTemplateID, gibbonEmailTemplate.type, gibbonEmailTemplate.timestamp
+/file-extensions
+Generated from the gibbonFileExtension table.
+Requires the School Admin module	GET POST PATCH PUT DELETE	file-extensions.read
+file-extensions.write	gibbonFileExtension.gibbonFileExtensionID, gibbonFileExtension.type, gibbonFileExtension.name
+/hooks
+Generated from the gibbonHook table.
+Requires the System Admin module	GET POST PATCH PUT DELETE	hooks.read
+hooks.write	gibbonHook.gibbonHookID, gibbonHook.name, gibbonHook.type, gibbonHook.gibbonModuleID
+/i18ns
+Generated from the gibboni18n table.
+Requires the System Admin module	GET POST PATCH PUT DELETE	i18ns.read
+i18ns.write	gibboni18n.gibboni18nID, gibboni18n.code, gibboni18n.name, gibboni18n.active, gibboni18n.installed, gibboni18n.systemDefault, gibboni18n.rtl
+/languages
+Generated from the gibbonLanguage table.
+Requires the Students module	GET POST PATCH PUT DELETE	languages.read
+languages.write	gibbonLanguage.gibbonLanguageID, gibbonLanguage.name
+/logs
+Generated from the gibbonLog table.
+Requires the System Admin module	GET	logs.read	gibbonLog.gibbonLogID, gibbonLog.gibbonModuleID, gibbonLog.gibbonPersonID, gibbonLog.gibbonSchoolYearID, gibbonLog.timestamp
+/modules
+Installed modules, their version and whether they are active.
+Requires the System Admin module	GET	modules.read	gibbonModule.active, gibbonModule.type, gibbonModule.category
+/notification-events
+Generated from the gibbonNotificationEvent table.
+Requires the System Admin module	GET POST PATCH PUT DELETE	notification-events.read
+notification-events.write	gibbonNotificationEvent.gibbonNotificationEventID, gibbonNotificationEvent.type, gibbonNotificationEvent.active
+/notification-listeners
+Generated from the gibbonNotificationListener table.
+Requires the System Admin module	GET POST PATCH PUT DELETE	notification-listeners.read
+notification-listeners.write	gibbonNotificationListener.gibbonNotificationListenerID, gibbonNotificationListener.gibbonNotificationEventID, gibbonNotificationListener.gibbonPersonID, gibbonNotificationListener.scopeID
+/notifications
+In-app notifications raised for a person.
+Requires the System Admin module	GET POST PATCH	notifications.read
+notifications.write	gibbonNotification.gibbonPersonID, gibbonNotification.status
+/outcomes
+Learning outcomes available to units and lessons.
+Requires the Planner module	GET	outcomes.read	gibbonOutcome.active, gibbonOutcome.scope, gibbonOutcome.gibbonDepartmentID, gibbonOutcome.category
+/permissions
+Which roles hold which action, the raw permission matrix.
+Requires the User Admin module	GET	permissions.read	gibbonPermission.gibbonRoleID, gibbonPermission.gibbonActionID, gibbonModule.name
+/rubrics
+Assessment rubrics.
+Requires the Rubrics module	GET	rubrics.read	gibbonRubric.active, gibbonRubric.scope, gibbonRubric.gibbonDepartmentID
+/settings
+Gibbon settings by scope. Values known to hold credentials are redacted.
+Requires the System Admin module	GET	settings.read	gibbonSetting.scope, gibbonSetting.name
+/themes
+Generated from the gibbonTheme table.
+Requires the System Admin module	GET POST PATCH PUT DELETE	themes.read
+themes.write	gibbonTheme.gibbonThemeID, gibbonTheme.name, gibbonTheme.active
+Wellbeing
+Endpoint	Methods	مجالات	التصفيات
+/alert-levels
+Severity levels (low, medium, high) used by medical and individual needs alerts.
+Requires the School Admin module	GET	alert-levels.read	—
+/alert-types
+Generated from the gibbonAlertType table.
+Requires the School Admin module	GET POST PATCH PUT DELETE	alert-types.read
+alert-types.write	gibbonAlertType.gibbonAlertTypeID, gibbonAlertType.name, gibbonAlertType.active, gibbonAlertType.automatic, gibbonAlertType.adminOnly, gibbonAlertType.useLevels, gibbonAlertType.type, gibbonAlertType.sequenceNumber, gibbonAlertType.timestampCreated
+/alerts
+Generated from the gibbonAlert table.
+Requires the School Admin module	GET POST PATCH PUT DELETE	alerts.read
+alerts.write	gibbonAlert.gibbonAlertID, gibbonAlert.gibbonSchoolYearID, gibbonAlert.gibbonPersonID, gibbonAlert.gibbonCourseClassID, gibbonAlert.gibbonAlertLevelID, gibbonAlert.gibbonAlertTypeID, gibbonAlert.context, gibbonAlert.type, gibbonAlert.status, gibbonAlert.dateStart, gibbonAlert.dateEnd, gibbonAlert.timestampCreated, gibbonAlert.timestampStatus
+/attendance
+Per-person attendance log entries, the authoritative attendance record.
+Requires the Attendance module	GET POST PATCH DELETE	attendance.read
+attendance.write	gibbonAttendanceLogPerson.gibbonPersonID, gibbonAttendanceLogPerson.date, gibbonAttendanceLogPerson.type, gibbonAttendanceLogPerson.direction, gibbonAttendanceLogPerson.context, gibbonAttendanceLogPerson.gibbonFormGroupID, gibbonAttendanceLogPerson.gibbonCourseClassID, gibbonAttendanceLogPerson.gibbonAttendanceCodeID
+/attendance-class-logs
+Which classes had attendance taken, by whom and when.
+Requires the Attendance module	GET	attendance-class-logs.read	gibbonAttendanceLogCourseClass.gibbonCourseClassID, gibbonAttendanceLogCourseClass.date
+/attendance-codes
+Attendance codes and what each one counts as.
+Requires the Attendance module	GET	attendance-codes.read	gibbonAttendanceCode.active, gibbonAttendanceCode.type, gibbonAttendanceCode.direction, gibbonAttendanceCode.scope, gibbonAttendanceCode.reportable
+/attendance-form-group-logs
+Which form groups had attendance taken, by whom and when.
+Requires the Attendance module	GET	attendance-form-group-logs.read	gibbonAttendanceLogFormGroup.gibbonFormGroupID, gibbonAttendanceLogFormGroup.date
+/behaviour
+Positive and negative behaviour records against a student.
+Requires the Behaviour module	GET POST PATCH DELETE	behaviour.read
+behaviour.write	gibbonBehaviour.gibbonPersonID, gibbonBehaviour.type, gibbonBehaviour.descriptor, gibbonBehaviour.level, gibbonBehaviour.date
+/behaviour-follow-ups
+Generated from the gibbonBehaviourFollowUp table.
+Requires the Behaviour module	GET POST PATCH PUT DELETE	behaviour-follow-ups.read
+behaviour-follow-ups.write	gibbonBehaviourFollowUp.gibbonBehaviourFollowUpID, gibbonBehaviourFollowUp.gibbonBehaviourID, gibbonBehaviourFollowUp.gibbonPersonID, gibbonBehaviourFollowUp.timestamp
+/behaviour-letters
+Escalation letters generated from behaviour records.
+Requires the Behaviour module	GET	behaviour-letters.read	gibbonBehaviourLetter.gibbonPersonID, gibbonBehaviourLetter.status, gibbonBehaviourLetter.letterLevel
+/first-aid
+First aid incidents, treatment given and follow-up.
+Requires the Medical module	GET POST PATCH	first-aid.read
+first-aid.write	gibbonFirstAid.gibbonPersonIDPatient, gibbonFirstAid.gibbonPersonIDFirstAider, gibbonFirstAid.date
+/first-aid-follow-ups
+Generated from the gibbonFirstAidFollowUp table.
+Requires the Students module	GET POST PATCH PUT DELETE	first-aid-follow-ups.read
+first-aid-follow-ups.write	gibbonFirstAidFollowUp.gibbonFirstAidFollowUpID, gibbonFirstAidFollowUp.gibbonFirstAidID, gibbonFirstAidFollowUp.gibbonPersonID, gibbonFirstAidFollowUp.timestamp
+/in-archives
+Generated from the gibbonINArchive table.
+Requires the Individual Needs module	GET	in-archives.read	gibbonINArchive.gibbonINArchiveID, gibbonINArchive.gibbonPersonID, gibbonINArchive.archiveTimestamp
+/in-assistants
+Generated from the gibbonINAssistant table.
+Requires the Individual Needs module	GET POST PATCH PUT DELETE	in-assistants.read
+in-assistants.write	gibbonINAssistant.gibbonINAssistantID
+/in-descriptors
+Generated from the gibbonINDescriptor table.
+Requires the Individual Needs module	GET POST PATCH PUT DELETE	in-descriptors.read
+in-descriptors.write	gibbonINDescriptor.gibbonINDescriptorID, gibbonINDescriptor.name, gibbonINDescriptor.nameShort, gibbonINDescriptor.sequenceNumber
+/in-investigation-contributions
+Generated from the gibbonINInvestigationContribution table.
+Requires the Individual Needs module	GET POST PATCH PUT DELETE	in-investigation-contributions.read
+in-investigation-contributions.write	gibbonINInvestigationContribution.gibbonINInvestigationContributionID, gibbonINInvestigationContribution.gibbonINInvestigationID, gibbonINInvestigationContribution.type, gibbonINInvestigationContribution.gibbonPersonID, gibbonINInvestigationContribution.gibbonCourseClassPersonID, gibbonINInvestigationContribution.status
+/in-investigations
+Generated from the gibbonINInvestigation table.
+Requires the Individual Needs module	GET POST PATCH PUT DELETE	in-investigations.read
+in-investigations.write	gibbonINInvestigation.gibbonINInvestigationID, gibbonINInvestigation.gibbonSchoolYearID, gibbonINInvestigation.status, gibbonINInvestigation.date, gibbonINInvestigation.parentsInformed
+/individual-needs
+Individual needs plans: strategies, targets and notes. Highly sensitive.
+Requires the Individual Needs module	GET	individual-needs.read	gibbonIN.gibbonPersonID
+/individual-needs-descriptors
+Individual needs descriptors assigned to a student, with alert level.
+Requires the Individual Needs module	GET	individual-needs-descriptors.read	gibbonINPersonDescriptor.gibbonPersonID, gibbonINPersonDescriptor.gibbonINDescriptorID, gibbonINPersonDescriptor.gibbonAlertLevelID
+/medical
+Medical summary for a person, including long-term medication. Highly sensitive.
+Requires the Medical module	GET	medical.read	gibbonPersonMedical.gibbonPersonID, gibbonPersonMedical.longTermMedication
+/medical-conditions
+Conditions recorded against a medical record, with triggers and response plan.
+Requires the Medical module	GET	medical-conditions.read	gibbonPersonMedicalCondition.gibbonPersonMedicalID, gibbonPersonMedical.gibbonPersonID, gibbonPersonMedicalCondition.gibbonAlertLevelID
+/medical-conditions-2
+Generated from the gibbonMedicalCondition table.
+Requires the School Admin module	GET POST PATCH PUT DELETE	medical-conditions-2.read
+medical-conditions-2.write	gibbonMedicalCondition.gibbonMedicalConditionID, gibbonMedicalCondition.name
+/student-note-categories
+Generated from the gibbonStudentNoteCategory table.
+Requires the Students module	GET POST PATCH PUT DELETE	student-note-categories.read
+student-note-categories.write	gibbonStudentNoteCategory.gibbonStudentNoteCategoryID, gibbonStudentNoteCategory.name, gibbonStudentNoteCategory.active
+/student-notes
+Generated from the gibbonStudentNote table.
+Requires the Students module	GET POST PATCH PUT DELETE	student-notes.read
+student-notes.write	gibbonStudentNote.gibbonStudentNoteID, gibbonStudentNote.gibbonPersonID, gibbonStudentNote.gibbonStudentNoteCategoryID, gibbonStudentNote.timestamp
+
