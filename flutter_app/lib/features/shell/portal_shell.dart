@@ -242,6 +242,13 @@ class _PortalShellState extends ConsumerState<PortalShell> {
         ),
         actions: [
           if (user.portal == Portal.admin) const SchoolYearSwitcher(),
+          if (user.portal == Portal.admin)
+            IconButton(
+              tooltip: strings.system,
+              onPressed: () =>
+                  _push(context, strings.system, const AdminSystemPage()),
+              icon: const Icon(Icons.memory_rounded),
+            ),
           IconButton(
             tooltip: strings.notifications,
             onPressed: () => _push(
