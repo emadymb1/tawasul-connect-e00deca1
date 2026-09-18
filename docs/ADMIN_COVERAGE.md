@@ -1,6 +1,8 @@
 # هل يغطي التطبيق كل السيرفر؟ / Does the app cover the whole server?
 
-_آخر تحديث: الخطوة 9 — Last updated: Step 9_
+_آخر تحديث: الخطوة 12 — Last updated: Step 12_
+
+**الخطوة 12:** شاشات مصممة يدوياً للأشخاص (إنشاء/تعديل مستخدم مع اختيار الدور، تسجيل الطالب في الصف والفصل الإرشادي، إضافة/إزالة من الفصول الدراسية) فوق محرك الإدارة الشاملة. / **Step 12:** hand-designed people screens (user create/edit with role picker, student enrolment, class membership) on top of the generic Manage engine.
 
 ## الجواب المختصر (عربي)
 
