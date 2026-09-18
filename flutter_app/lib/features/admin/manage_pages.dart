@@ -221,6 +221,12 @@ class _ResourceListPageState extends ConsumerState<ResourceListPage> {
                   ? Icons.close_rounded
                   : Icons.checklist_rounded),
             ),
+          IconButton(
+            tooltip: strings.exportCsv,
+            onPressed: () => exportResourceCsv(context, ref, r.path,
+                filters: _query.filters),
+            icon: const Icon(Icons.download_rounded),
+          ),
           if (r.filters.isNotEmpty)
             IconButton(
               tooltip: strings.filters,
