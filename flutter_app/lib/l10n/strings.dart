@@ -185,8 +185,6 @@ class S {
   String get create => _('create');
   String get edit => _('edit');
   String get delete => _('delete');
-  String get save => _('save');
-  String get saved => _('saved');
   String get deleted => _('deleted');
   String get deleteQuestion => _('deleteQuestion');
   String get cancel => _('cancel');
@@ -207,7 +205,6 @@ class S {
   String categoryName(String category) => _('category_$category');
 
   // Step 10 — school year switcher and bulk actions
-  String get schoolYear => _('schoolYear');
   String get myOwnYear => _('myOwnYear');
   String get currentYear => _('currentYear');
   String get yearChanged => _('yearChanged');
@@ -435,8 +432,6 @@ class S {
     'create': 'Add',
     'edit': 'Edit',
     'delete': 'Delete',
-    'save': 'Save',
-    'saved': 'Saved to the server.',
     'deleted': 'Deleted.',
     'deleteQuestion':
         'Delete this record from the school server? This cannot be undone.',
@@ -461,7 +456,6 @@ class S {
     'category_School': 'School',
     'category_System': 'System',
     'category_Wellbeing': 'Wellbeing',
-    'schoolYear': 'School year',
     'myOwnYear': 'My own school year',
     'currentYear': 'Current year',
     'yearChanged': 'School year changed. Screens reloaded.',
@@ -668,8 +662,6 @@ class S {
     'create': 'إضافة',
     'edit': 'تعديل',
     'delete': 'حذف',
-    'save': 'حفظ',
-    'saved': 'تم الحفظ على الخادم.',
     'deleted': 'تم الحذف.',
     'deleteQuestion': 'حذف هذا السجل من خادم المدرسة؟ لا يمكن التراجع.',
     'cancel': 'إلغاء',
@@ -693,7 +685,6 @@ class S {
     'category_School': 'المدرسة',
     'category_System': 'النظام',
     'category_Wellbeing': 'الرعاية',
-    'schoolYear': 'العام الدراسي',
     'myOwnYear': 'عامي الدراسي',
     'currentYear': 'العام الحالي',
     'yearChanged': 'تم تغيير العام الدراسي وإعادة تحميل الشاشات.',
