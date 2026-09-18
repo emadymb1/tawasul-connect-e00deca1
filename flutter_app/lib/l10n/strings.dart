@@ -177,6 +177,23 @@ class S {
   String get operations => _('operations');
   String get today => _('today');
 
+  // Step 13 — API v2 capabilities (system, exports, bulk, webhooks)
+  String get system => _('system');
+  String get serverHealth => _('serverHealth');
+  String get serverStats => _('serverStats');
+  String get apiAnalytics => _('apiAnalytics');
+  String get resourceRegistry => _('resourceRegistry');
+  String get resourcesAvailable => _('resourcesAvailable');
+  String get writableResources => _('writableResources');
+  String get myPermissions => _('myPermissions');
+  String get credential => _('credential');
+  String get webhooks => _('webhooks');
+  String get addWebhook => _('addWebhook');
+  String get webhookUrl => _('webhookUrl');
+  String get webhookEvents => _('webhookEvents');
+  String get exportCsv => _('exportCsv');
+  String get exportedRows => _('exportedRows');
+
   // Step 9 — admin Manage browser (all server resources)
   String get manage => _('manage');
   String get manageSubtitle => _('manageSubtitle');
