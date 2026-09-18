@@ -16,7 +16,7 @@
 - التصميم: أخضر داكن / كريمي / أحمر / ذهبي، بطاقات دائرية الحواف، كما في `flutter_app/lib/app/theme.dart`. لا تغيّر نظام الألوان.
 - البنية: Riverpod + http. `core/api_client.dart` يتولى التوكن والترقيم (`page, pageSize, sort, search, fields`) وفلاتر النقاط (`table.column=value`) و`gibbonSchoolYearID` وتجديد 401 تلقائياً.
 - كل بوابة (طالب / ولي أمر / معلّم / إداري) لها `*_repository.dart` و`*_pages.dart` في `features/`، والتبويبات في `features/shell/portal_shell.dart`.
-- خارطة الطريق الكاملة في `roadmap.md`. الخطوتان 1 و2 مكتملتان في الكود (لم تُترجم بعد).
+- خارطة الطريق الكاملة في `roadmap.md`. الخطوات 1 إلى 12 مكتملة في الكود (لم تُترجم بعد).
 
 ## المطلوب الآن بالترتيب
 1. اقرأ `roadmap.md` و`docs/api_docs.txt` وكل ملفات `flutter_app/lib/` قبل أي تعديل.

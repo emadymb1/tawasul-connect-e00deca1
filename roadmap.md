@@ -124,6 +124,19 @@ All data is live from the API. No mock data anywhere.
 - [x] Arabic + English strings for all of the above
 - [ ] Compile locally, then: admin → dashboard → Browse by module → e.g. Finance → Invoices
 
+## Step 12 — Curated people screens for administrators (DONE — code complete, not yet compiled)
+- [x] Fixed three duplicate getters/keys in `l10n/strings.dart` (`save`, `saved`, `schoolYear`) that would have failed `flutter analyze`
+- [x] `features/admin/people_repository.dart`: `/users` create + PATCH, `/students` enrolment create / PATCH / DELETE, `/class-enrolments` add / change role / remove, lookups for `/roles`, `/houses`, `/year-groups`, `/form-groups`, person and class search
+- [x] `features/admin/people_pages.dart`:
+  - `PersonDetailPage` — hero, account details, student enrolments card, class enrolments card (add / remove)
+  - `PersonFormPage` — new / edit user with role picker from `/roles`, status, can-login switch, house, date-of-birth picker; PATCH sends only changed fields
+  - `StudentEnrolmentFormPage` — person picker, year group + form group dropdowns, roll order; created in the working school year
+  - `PersonPickerSheet`, `ClassPickerSheet` (server search) and `ClassMembersPage` (everyone in a class, add / remove)
+- [x] People tab: every student / staff / user row opens the person page; "New user" and "Enrol as student" buttons; new "Classes" tab → class members
+- [x] Arabic + English strings for all of the above
+- [ ] Compile locally: `cd flutter_app && flutter pub get && flutter analyze`, then People → Users → New user
+- [ ] Next curated screens (still served by the generic Manage forms meanwhile): courses + classes creation, family links (`/families`, `/family-adults`, `/family-children`), staff records (`/staff` POST), activity and trip management
+
 ## Open items needing you
 - [ ] Rotate the API key that was pasted in chat (Manage API Keys) — treat the old one as exposed.
 - [ ] Confirm which roles in `/roles` map to Teacher vs Support Staff vs Admin at your school if the defaults differ.
