@@ -9,6 +9,8 @@ import '../auth/auth_controller.dart';
 import '../school/school_repository.dart';
 import 'admin_repository.dart';
 import 'module_pages.dart';
+import 'people_pages.dart';
+import 'people_repository.dart';
 
 class AdminDashboardPage extends ConsumerWidget {
   const AdminDashboardPage({super.key});
@@ -166,7 +168,7 @@ class AdminPeoplePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final strings = S.of(context);
     return DefaultTabController(
-      length: 4,
+      length: 5,
       child: Column(
         children: [
           TabBar(
@@ -175,6 +177,7 @@ class AdminPeoplePage extends ConsumerWidget {
               Tab(text: strings.students),
               Tab(text: strings.staff),
               Tab(text: strings.users),
+              Tab(text: strings.classes),
               Tab(text: strings.roles),
             ],
           ),
@@ -184,6 +187,7 @@ class AdminPeoplePage extends ConsumerWidget {
                 const AdminStudentsPage(),
                 const AdminStaffPage(),
                 const AdminUsersPage(),
+                const AdminClassesPage(),
                 _RolesTab(),
               ],
             ),
@@ -257,13 +261,37 @@ class AdminStudentsPage extends ConsumerWidget {
                       subtitle: [row['formGroup'], row['yearGroup']]
                           .where((e) => e != null && '$e'.isNotEmpty)
                           .join(' · '),
+                      trailing: const Icon(Icons.chevron_right_rounded,
+                          color: TawasulColors.muted),
+                      onTap: () => _openPerson(context, row),
                     ))
                 .toList(),
+          ),
+          const SizedBox(height: 12),
+          FilledButton.icon(
+            onPressed: () async {
+              final changed = await Navigator.of(context).push<bool>(
+                MaterialPageRoute(
+                    builder: (_) => const StudentEnrolmentFormPage()),
+              );
+              if (changed == true) ref.invalidate(adminStudentsProvider);
+            },
+            icon: const Icon(Icons.school_outlined),
+            label: Text(strings.enrolStudent),
           ),
         ],
       ),
     );
   }
+}
+
+/// Opens the person behind any list row that carries a gibbonPersonID.
+void _openPerson(BuildContext context, Map<String, dynamic> row) {
+  final id = personId(row);
+  if (id == null) return;
+  Navigator.of(context).push(MaterialPageRoute(
+    builder: (_) => PersonDetailPage(personId: id, initial: row),
+  ));
 }
 
 class AdminStaffPage extends ConsumerWidget {
@@ -298,6 +326,9 @@ class AdminStaffPage extends ConsumerWidget {
                           '${row['preferredName'] ?? ''} ${row['surname'] ?? ''}'
                               .trim(),
                       subtitle: '${row['jobTitle'] ?? row['type'] ?? ''}',
+                      trailing: const Icon(Icons.chevron_right_rounded,
+                          color: TawasulColors.muted),
+                      onTap: () => _openPerson(context, row),
                     ))
                 .toList(),
           ),
@@ -341,6 +372,73 @@ class AdminUsersPage extends ConsumerWidget {
                       subtitle: [row['username'], row['email'], row['status']]
                           .where((e) => e != null && '$e'.isNotEmpty)
                           .join(' · '),
+                      trailing: const Icon(Icons.chevron_right_rounded,
+                          color: TawasulColors.muted),
+                      onTap: () => _openPerson(context, row),
+                    ))
+                .toList(),
+          ),
+          const SizedBox(height: 12),
+          FilledButton.icon(
+            onPressed: () async {
+              final changed = await Navigator.of(context).push<bool>(
+                MaterialPageRoute(builder: (_) => const PersonFormPage()),
+              );
+              if (changed == true) ref.invalidate(adminUsersProvider);
+            },
+            icon: const Icon(Icons.person_add_alt_1_outlined),
+            label: Text(strings.newUser),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Classes: search, then open a class to see and change its members.
+class AdminClassesPage extends ConsumerWidget {
+  const AdminClassesPage({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final strings = S.of(context);
+    return RefreshIndicator(
+      onRefresh: () async => ref.invalidate(adminClassesProvider),
+      child: ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 28),
+        children: [
+          TextField(
+            decoration: InputDecoration(
+              hintText: strings.searchClasses,
+              prefixIcon: const Icon(Icons.search_rounded),
+            ),
+            onSubmitted: (value) =>
+                ref.read(adminClassSearchProvider.notifier).state = value,
+          ),
+          const SizedBox(height: 16),
+          AsyncCard(
+            title: strings.classes,
+            value: ref.watch(adminClassesProvider),
+            onRetry: () => ref.invalidate(adminClassesProvider),
+            builder: (rows) => rows
+                .map((row) => DetailRow(
+                      leading: const Icon(Icons.class_outlined,
+                          color: TawasulColors.forest),
+                      title: className(row),
+                      subtitle: [
+                        row['department'],
+                        if (row['enrolmentCount'] != null ||
+                            row['students'] != null)
+                          '${strings.students}: ${row['enrolmentCount'] ?? row['students']}',
+                      ].where((e) => e != null && '$e'.isNotEmpty).join(' · '),
+                      trailing: const Icon(Icons.chevron_right_rounded,
+                          color: TawasulColors.muted),
+                      onTap: row['gibbonCourseClassID'] == null
+                          ? null
+                          : () => Navigator.of(context).push(MaterialPageRoute(
+                                builder: (_) => ClassMembersPage(classRow: row),
+                              )),
                     ))
                 .toList(),
           ),

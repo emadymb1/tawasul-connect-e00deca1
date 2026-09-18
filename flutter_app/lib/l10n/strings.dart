@@ -226,6 +226,46 @@ class S {
   String get editable => _('editable');
   String get pages => _('pages');
   String get openModules => _('openModules');
+  String get personDetails => _('personDetails');
+  String get accountDetails => _('accountDetails');
+  String get personalDetails => _('personalDetails');
+  String get dateOfBirth => _('dateOfBirth');
+  String get gender => _('gender');
+  String get primaryRole => _('primaryRole');
+  String get canLogin => _('canLogin');
+  String get studentIdLabel => _('studentIdLabel');
+  String get enrolments => _('enrolments');
+  String get noEnrolments => _('noEnrolments');
+  String get rollOrder => _('rollOrder');
+  String get enrolStudent => _('enrolStudent');
+  String get editEnrolment => _('editEnrolment');
+  String get classEnrolments => _('classEnrolments');
+  String get noClassEnrolments => _('noClassEnrolments');
+  String get addToClass => _('addToClass');
+  String get removeFromClass => _('removeFromClass');
+  String get removeQuestion => _('removeQuestion');
+  String get removed => _('removed');
+  String get newUser => _('newUser');
+  String get editUser => _('editUser');
+  String get titleLabel => _('titleLabel');
+  String get firstName => _('firstName');
+  String get surname => _('surname');
+  String get preferredName => _('preferredName');
+  String get officialName => _('officialName');
+  String get male => _('male');
+  String get female => _('female');
+  String get other => _('other');
+  String get unspecified => _('unspecified');
+  String get passwordKeepHint => _('passwordKeepHint');
+  String get userCreated => _('userCreated');
+  String get pickPerson => _('pickPerson');
+  String get enrolmentSaved => _('enrolmentSaved');
+  String get enrolmentYearHint => _('enrolmentYearHint');
+  String get searchPeople => _('searchPeople');
+  String get searchClasses => _('searchClasses');
+  String get roleInClass => _('roleInClass');
+  String get classMembers => _('classMembers');
+  String get openPerson => _('openPerson');
 
   // Step 6 — shared school life
   String get schoolLife => _('schoolLife');
@@ -477,6 +517,46 @@ class S {
     'editable': 'Editable',
     'pages': 'Pages',
     'openModules': 'Browse by module',
+    'personDetails': 'Person details',
+    'accountDetails': 'Account',
+    'personalDetails': 'Personal details',
+    'dateOfBirth': 'Date of birth',
+    'gender': 'Gender',
+    'primaryRole': 'Primary role',
+    'canLogin': 'Can sign in',
+    'studentIdLabel': 'Student ID',
+    'enrolments': 'Student enrolments',
+    'noEnrolments': 'Not enrolled as a student in this school year.',
+    'rollOrder': 'Roll order',
+    'enrolStudent': 'Enrol as student',
+    'editEnrolment': 'Edit enrolment',
+    'classEnrolments': 'Classes',
+    'noClassEnrolments': 'No class enrolments yet.',
+    'addToClass': 'Add to class',
+    'removeFromClass': 'Remove from class',
+    'removeQuestion': 'Remove this record? You can add it again later.',
+    'removed': 'Removed',
+    'newUser': 'New user',
+    'editUser': 'Edit user',
+    'titleLabel': 'Title',
+    'firstName': 'First name',
+    'surname': 'Surname',
+    'preferredName': 'Preferred name',
+    'officialName': 'Official name',
+    'male': 'Male',
+    'female': 'Female',
+    'other': 'Other',
+    'unspecified': 'Unspecified',
+    'passwordKeepHint': 'Leave empty to keep the current password.',
+    'userCreated': 'User created on the server.',
+    'pickPerson': 'Choose a person',
+    'enrolmentSaved': 'Enrolment saved.',
+    'enrolmentYearHint': 'The enrolment is created in the school year you are working in (see the year switcher).',
+    'searchPeople': 'Search people by name or username',
+    'searchClasses': 'Search classes',
+    'roleInClass': 'Role in class',
+    'classMembers': 'Class members',
+    'openPerson': 'Open record',
   };
 
   static const Map<String, String> _ar = {
@@ -705,6 +785,46 @@ class S {
     'editable': 'قابلة للتعديل',
     'pages': 'الصفحات',
     'openModules': 'التصفح حسب الموديول',
+    'personDetails': 'بيانات الشخص',
+    'accountDetails': 'الحساب',
+    'personalDetails': 'البيانات الشخصية',
+    'dateOfBirth': 'تاريخ الميلاد',
+    'gender': 'الجنس',
+    'primaryRole': 'الدور الأساسي',
+    'canLogin': 'يمكنه تسجيل الدخول',
+    'studentIdLabel': 'رقم الطالب',
+    'enrolments': 'تسجيلات الطالب',
+    'noEnrolments': 'غير مسجّل كطالب في هذا العام الدراسي.',
+    'rollOrder': 'ترتيب الكشف',
+    'enrolStudent': 'تسجيل كطالب',
+    'editEnrolment': 'تعديل التسجيل',
+    'classEnrolments': 'الفصول',
+    'noClassEnrolments': 'لا توجد تسجيلات في الفصول بعد.',
+    'addToClass': 'إضافة إلى فصل',
+    'removeFromClass': 'إزالة من الفصل',
+    'removeQuestion': 'إزالة هذا السجل؟ يمكنك إضافته مرة أخرى لاحقاً.',
+    'removed': 'تمت الإزالة',
+    'newUser': 'مستخدم جديد',
+    'editUser': 'تعديل المستخدم',
+    'titleLabel': 'اللقب',
+    'firstName': 'الاسم الأول',
+    'surname': 'اسم العائلة',
+    'preferredName': 'الاسم المفضّل',
+    'officialName': 'الاسم الرسمي',
+    'male': 'ذكر',
+    'female': 'أنثى',
+    'other': 'آخر',
+    'unspecified': 'غير محدد',
+    'passwordKeepHint': 'اتركه فارغاً للإبقاء على كلمة المرور الحالية.',
+    'userCreated': 'تم إنشاء المستخدم على الخادم.',
+    'pickPerson': 'اختر شخصاً',
+    'enrolmentSaved': 'تم حفظ التسجيل.',
+    'enrolmentYearHint': 'يُنشأ التسجيل في العام الدراسي الذي تعمل فيه حالياً (انظر مبدّل العام).',
+    'searchPeople': 'ابحث عن شخص بالاسم أو اسم المستخدم',
+    'searchClasses': 'ابحث في الفصول',
+    'roleInClass': 'الدور في الفصل',
+    'classMembers': 'أعضاء الفصل',
+    'openPerson': 'فتح السجل',
   };
 }
 
