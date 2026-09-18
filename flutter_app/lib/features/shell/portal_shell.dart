@@ -180,10 +180,6 @@ class _PortalShellState extends ConsumerState<PortalShell> {
               icon: Icons.dataset_outlined,
               label: strings.manage,
               page: const AdminManagePage()),
-          PortalTab(
-              icon: Icons.memory_rounded,
-              label: strings.system,
-              page: const AdminSystemPage()),
         ];
     }
   }
