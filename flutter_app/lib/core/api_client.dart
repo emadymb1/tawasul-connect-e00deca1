@@ -145,12 +145,20 @@ class ApiClient {
       String message = 'Request failed (${response.statusCode})';
       String? requestId;
       if (decoded is Map) {
-        message = (decoded['detail'] ??
-                decoded['title'] ??
-                decoded['message'] ??
-                message)
-            .toString();
-        requestId = decoded['requestID']?.toString();
+        // v2 shape: {"error":{"code","message","details"},"meta":{"requestID"}}
+        final error = decoded['error'];
+        if (error is Map) {
+          message = (error['message'] ?? error['code'] ?? message).toString();
+        } else {
+          message = (decoded['detail'] ??
+                  decoded['title'] ??
+                  decoded['message'] ??
+                  message)
+              .toString();
+        }
+        final meta = decoded['meta'];
+        requestId = (meta is Map ? meta['requestID'] : null)?.toString() ??
+            decoded['requestID']?.toString();
       }
       throw ApiException(response.statusCode, message, requestId: requestId);
     }
@@ -327,5 +335,204 @@ class ApiClient {
       throw ApiException(response.statusCode, message);
     }
     return _unwrap(decoded);
+  }
+
+  // ---------------------------------------------------------------------
+  // API v2 capabilities (bulk, export, aggregation, relations, composite,
+  // files, batch and meta endpoints).
+  // ---------------------------------------------------------------------
+
+  /// Create / update / delete up to 500 records of one resource in a single
+  /// transaction. Each item is a new object, an object carrying its primary
+  /// key, or `{"op":"delete","id":"..."}`.
+  Future<Map<String, dynamic>> bulk(
+    String resource,
+    List<Map<String, dynamic>> items,
+  ) async {
+    final decoded =
+        await _send('POST', '/$resource/bulk', body: {'items': items});
+    return _unwrap(decoded);
+  }
+
+  /// Bulk delete helper.
+  Future<Map<String, dynamic>> bulkDelete(
+          String resource, Iterable<String> ids) =>
+      bulk(resource,
+          [for (final id in ids) {'op': 'delete', 'id': id}]);
+
+  /// Whole-resource CSV export (no pagination). Returns the raw CSV text.
+  Future<String> exportCsv(
+    String resource, {
+    Map<String, dynamic> filters = const {},
+  }) async {
+    final uri = _uri('/$resource/export', filters);
+    final headers = await _headers();
+    headers['Accept'] = 'text/csv';
+    final response =
+        await _http.get(uri, headers: headers).timeout(AppConfig.timeout);
+    if (response.statusCode >= 400) {
+      if (response.statusCode == 403) onForbidden?.call('/$resource/export');
+      throw ApiException(response.statusCode, 'Export failed');
+    }
+    return utf8.decode(response.bodyBytes);
+  }
+
+  /// Unique non-null values of one column, for building filter pickers.
+  Future<List<String>> distinct(String resource, String field) async {
+    final decoded = await _send('GET', '/$resource/distinct',
+        query: {'field': field});
+    final list = decoded is Map ? decoded['data'] : decoded;
+    if (list is! List) return const [];
+    return list
+        .map((e) => e is Map ? '${e['value'] ?? e.values.first}' : '$e')
+        .toList();
+  }
+
+  /// Counts grouped by one or more fields, e.g. `by: 'status'`.
+  Future<List<Map<String, dynamic>>> aggregate(
+    String resource, {
+    required String by,
+    Map<String, dynamic> filters = const {},
+  }) async {
+    final decoded = await _send('GET', '/$resource/aggregate',
+        query: {'by': by, ...filters});
+    final list = decoded is Map ? decoded['data'] : decoded;
+    if (list is! List) return const [];
+    return list.map((e) => Map<String, dynamic>.from(e as Map)).toList();
+  }
+
+  /// Follow a foreign-key relation: `/students/{id}/attendance`.
+  Future<Page<Map<String, dynamic>>> relation(
+    String resource,
+    String id,
+    String relation, {
+    int page = 1,
+    int? pageSize,
+    Map<String, dynamic> filters = const {},
+  }) =>
+      getPage('/$resource/$id/$relation',
+          page: page, pageSize: pageSize, filters: filters);
+
+  /// Composite endpoints such as `/students/{id}/profile`.
+  Future<Map<String, dynamic>> composite(String path) => getObject(path);
+
+  Future<Map<String, dynamic>> studentProfile(String id) =>
+      composite('/students/$id/profile');
+  Future<Map<String, dynamic>> staffProfile(String id) =>
+      composite('/staff/$id/profile');
+  Future<Map<String, dynamic>> familyProfile(String id) =>
+      composite('/families/$id/profile');
+  Future<Map<String, dynamic>> courseOverview(String id) =>
+      composite('/courses/$id/overview');
+  Future<Map<String, dynamic>> studentFinance(String id) =>
+      composite('/students/$id/finance');
+  Future<Map<String, dynamic>> studentTimetable(String id) =>
+      composite('/students/$id/timetable');
+  Future<Map<String, dynamic>> classRoster(String id) =>
+      composite('/classes/$id/roster');
+
+  /// Several calls in one round-trip. Each entry needs `method` and `path`.
+  Future<List<dynamic>> batch(List<Map<String, dynamic>> requests) async {
+    final decoded = await _send('POST', '/batch', body: {'requests': requests});
+    final list = decoded is Map ? (decoded['data'] ?? decoded['responses'])
+        : decoded;
+    return list is List ? list : const [];
+  }
+
+  // --- Files (only when the administrator enabled file transfer) ---------
+
+  Future<List<Map<String, dynamic>>> fileFields(
+      String resource, String id) async {
+    final decoded = await _send('GET', '/files/$resource/$id');
+    final list = decoded is Map ? decoded['data'] : decoded;
+    if (list is! List) return const [];
+    return list.map((e) => Map<String, dynamic>.from(e as Map)).toList();
+  }
+
+  Uri fileUrl(String resource, String id, String field,
+          {bool inline = true}) =>
+      _uri('/files/$resource/$id/$field', {'disposition': inline ? 'inline' : 'attachment'});
+
+  /// Upload a file as base64 JSON, which works on every platform.
+  Future<Map<String, dynamic>> uploadFile(
+    String resource,
+    String id,
+    String field, {
+    required String filename,
+    required List<int> bytes,
+  }) async {
+    final decoded = await _send('POST', '/files/$resource/$id/$field', body: {
+      'filename': filename,
+      'content': base64Encode(bytes),
+    });
+    return _unwrap(decoded);
+  }
+
+  Future<void> deleteFile(String resource, String id, String field) =>
+      _send('DELETE', '/files/$resource/$id/$field');
+
+  // --- Meta endpoints ----------------------------------------------------
+
+  Future<Map<String, dynamic>> health() => getObject('/health');
+  Future<Map<String, dynamic>> stats() => getObject('/stats');
+  Future<Map<String, dynamic>> dashboard() => getObject('/dashboard');
+  Future<Map<String, dynamic>> permissions() => getObject('/permissions');
+  Future<Map<String, dynamic>> analytics({int days = 7}) =>
+      getObject('/analytics', query: {'days': days});
+  Future<Map<String, dynamic>> me() => getObject('/auth/me');
+
+  /// Live resource registry: every resource with its methods and filters.
+  Future<List<Map<String, dynamic>>> resources() async {
+    final decoded = await _send('GET', '/resources');
+    final list = decoded is Map ? (decoded['data'] ?? decoded['resources'])
+        : decoded;
+    if (list is List) {
+      return list.map((e) => Map<String, dynamic>.from(e as Map)).toList();
+    }
+    if (list is Map) {
+      return list.entries
+          .map((e) => <String, dynamic>{
+                'name': e.key,
+                ...(e.value is Map
+                    ? Map<String, dynamic>.from(e.value as Map)
+                    : const {}),
+              })
+          .toList();
+    }
+    return const [];
+  }
+
+  Future<List<String>> scopes() async {
+    final decoded = await _send('GET', '/scopes');
+    final list = decoded is Map ? (decoded['data'] ?? decoded['scopes'])
+        : decoded;
+    if (list is List) {
+      return list
+          .map((e) => e is Map ? '${e['scope'] ?? e['name']}' : '$e')
+          .toList();
+    }
+    if (list is Map) return list.keys.map((e) => '$e').toList();
+    return const [];
+  }
+
+  Future<List<String>> webhookEvents() async {
+    final decoded = await _send('GET', '/events');
+    final list = decoded is Map ? (decoded['data'] ?? decoded['events'])
+        : decoded;
+    if (list is List) {
+      return list
+          .map((e) => e is Map ? '${e['event'] ?? e['name']}' : '$e')
+          .toList();
+    }
+    return const [];
+  }
+
+  /// Logout (revokes the current user token server-side).
+  Future<void> logout() async {
+    try {
+      await _send('POST', '/auth/logout', body: const {});
+    } catch (_) {
+      // Signing out locally must succeed even if the server call fails.
+    }
   }
 }
