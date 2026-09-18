@@ -4,6 +4,7 @@ import '../../core/api_client.dart';
 import '../../core/openapi_schema.dart';
 import '../../core/providers.dart';
 import '../../core/school_year.dart';
+import '../../core/server_capabilities.dart';
 import 'resource_catalog.dart';
 
 /// Query for one page of a resource in the Manage browser.

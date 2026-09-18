@@ -10,6 +10,7 @@ import '../../widgets/school_year_switcher.dart';
 import '../../l10n/strings.dart';
 import '../admin/admin_pages.dart';
 import '../admin/manage_pages.dart';
+import '../admin/system_pages.dart';
 import '../auth/auth_controller.dart';
 import '../auth/models.dart';
 import '../community/community_pages.dart';
@@ -179,6 +180,10 @@ class _PortalShellState extends ConsumerState<PortalShell> {
               icon: Icons.dataset_outlined,
               label: strings.manage,
               page: const AdminManagePage()),
+          PortalTab(
+              icon: Icons.memory_rounded,
+              label: strings.system,
+              page: const AdminSystemPage()),
         ];
     }
   }
