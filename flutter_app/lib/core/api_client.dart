@@ -145,12 +145,20 @@ class ApiClient {
       String message = 'Request failed (${response.statusCode})';
       String? requestId;
       if (decoded is Map) {
-        message = (decoded['detail'] ??
-                decoded['title'] ??
-                decoded['message'] ??
-                message)
-            .toString();
-        requestId = decoded['requestID']?.toString();
+        // v2 shape: {"error":{"code","message","details"},"meta":{"requestID"}}
+        final error = decoded['error'];
+        if (error is Map) {
+          message = (error['message'] ?? error['code'] ?? message).toString();
+        } else {
+          message = (decoded['detail'] ??
+                  decoded['title'] ??
+                  decoded['message'] ??
+                  message)
+              .toString();
+        }
+        final meta = decoded['meta'];
+        requestId = (meta is Map ? meta['requestID'] : null)?.toString() ??
+            decoded['requestID']?.toString();
       }
       throw ApiException(response.statusCode, message, requestId: requestId);
     }
