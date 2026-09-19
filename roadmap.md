@@ -175,3 +175,8 @@ Done in the app:
 - [ ] Next: use the composite endpoints to replace multi-call profile screens (student, staff, family,
       class roster), bulk attendance / markbook saving via `/bulk`, and attachment upload where the
       server has file fields
+
+## Step 14 — APK delivery (added 2026-09-19)
+- Added GitHub Actions workflow `.github/workflows/android-apk.yml` that builds a release APK artifact.
+- Added `docs/BUILD_APK.md` with both the GitHub and local build routes.
+- No Flutter/Android toolchain exists in Lovable, so the APK is produced on GitHub or locally.
