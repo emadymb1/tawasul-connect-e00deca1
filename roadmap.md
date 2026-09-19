@@ -180,3 +180,12 @@ Done in the app:
 - Added GitHub Actions workflow `.github/workflows/android-apk.yml` that builds a release APK artifact.
 - Added `docs/BUILD_APK.md` with both the GitHub and local build routes.
 - No Flutter/Android toolchain exists in Lovable, so the APK is produced on GitHub or locally.
+
+## Step 15 — APK workflow readiness verified (added 2026-09-19)
+- Verified the GitHub Actions build inputs exist: `assets/icon/app_icon.png` + `flutter_launcher_icons` /
+  `flutter_native_splash` config in `pubspec.yaml`, `native_names/android/...` strings, `android/` folder.
+- Verified `lib/core/config.dart` reads `TAWASUL_BASE_URL` with the real server URL as the default.
+- The Lovable project's git remote is Lovable internal storage, NOT GitHub — GitHub connection is a
+  Lovable-editor action (Plus menu → GitHub → Connect project); it cannot be performed from chat.
+- Triggering the workflow is a GitHub-side action (push to main, or Actions → Run workflow). Not
+  runnable from chat. Walkthrough given to the user for repo connection, build trigger, and install.
